@@ -103,6 +103,13 @@ After completing all artifacts, summarize:
   - Do NOT copy `<context>`, `<rules>`, `<project_context>` blocks into the artifact
   - These guide what you write, but should never appear in the output
 
+**Atomic tasks**: When creating `tasks.md`, tasks must be atomic and grouped:
+- Each task is a single, self-contained unit of work (one file, one function, one concern)
+- Break anything broad into smaller tasks — prefer specificity over brevity
+- Group related tasks under named section headers (e.g., `## Group: Data Layer`, `## Group: UI Components`)
+- Each group must be independently implementable and reviewable — it is a natural branch/PR boundary
+- Aim for 2–5 tasks per group; avoid groups so large they blur review focus
+
 **Guardrails**
 - Create ALL artifacts needed for implementation (as defined by schema's `apply.requires`)
 - Always read dependency artifacts before creating a new one

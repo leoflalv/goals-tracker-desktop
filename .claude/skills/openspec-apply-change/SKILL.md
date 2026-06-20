@@ -67,44 +67,99 @@ Implement tasks from an OpenSpec change.
    - Remaining tasks overview
    - Dynamic instruction from CLI
 
-6. **Implement tasks (loop until done or blocked)**
+6. **Identify task groups**
 
-   For each pending task:
-   - Show which task is being worked on
-   - Make the code changes required
-   - Keep changes minimal and focused
-   - Mark task complete in the tasks file: `- [ ]` → `- [x]`
-   - Continue to next task
+   Parse `tasks.md` for `## Group:` section headers — each header defines one group.
+   If no groups exist, cluster the remaining tasks into logical groups yourself, announce the grouping to the user, and ask for confirmation before proceeding.
 
-   **Pause if:**
+   Show the full group plan upfront:
+   ```
+   Groups to implement:
+   1. <Group A> (N tasks)
+   2. <Group B> (M tasks)
+   ...
+   ```
+
+7. **Implement one group at a time**
+
+   For each pending group, in order:
+
+   a. **Create a git branch for the group**
+      ```bash
+      git checkout -b feature/<change-name>-<group-kebab-name>
+      ```
+      Derive `<group-kebab-name>` from the group header (e.g., "Data Layer" → `data-layer`).
+      Announce: "Created branch: `feature/<change-name>-<group-kebab-name>`"
+
+   b. **Implement all tasks in the group**
+      - Show which task is being worked on
+      - Make the code changes required
+      - Keep changes minimal and focused
+      - Mark task complete in tasks.md: `- [ ]` → `- [x]`
+
+   c. **After completing the group, pause and report**
+      ```
+      ## Group Complete: <Group Name>
+
+      Branch: feature/<change-name>-<group-kebab-name>
+      Tasks completed: N
+      Files changed: <list>
+
+      Review the changes on this branch. When ready, reply to continue with the next group.
+      ```
+      **Wait for the user to respond before starting the next group.**
+
+   **Pause mid-group if:**
    - Task is unclear → ask for clarification
    - Implementation reveals a design issue → suggest updating artifacts
    - Error or blocker encountered → report and wait for guidance
    - User interrupts
 
-7. **On completion or pause, show status**
+8. **On full completion, show status**
 
    Display:
-   - Tasks completed this session
+   - All groups and tasks completed
    - Overall progress: "N/M tasks complete"
-   - If all done: suggest archive
-   - If paused: explain why and wait for guidance
+   - Suggest archive
 
 **Output During Implementation**
 
 ```
 ## Implementing: <change-name> (schema: <schema-name>)
 
-Working on task 3/7: <task description>
-[...implementation happening...]
+Groups to implement:
+1. Data Layer (3 tasks)
+2. UI Components (4 tasks)
+
+---
+
+### Group 1/2: Data Layer
+Branch: feature/<change-name>-data-layer
+
+Working on task 1/3: <task description>
+[...implementation...]
 ✓ Task complete
 
-Working on task 4/7: <task description>
-[...implementation happening...]
+Working on task 2/3: <task description>
+[...implementation...]
 ✓ Task complete
 ```
 
-**Output On Completion**
+**Output On Group Completion (pause point)**
+
+```
+## Group Complete: <Group Name>
+
+Branch: feature/<change-name>-<group-name>
+Tasks completed: 3/3
+Files changed:
+- src/features/goals/domain/Goal.ts
+- src-tauri/src/lib.rs
+
+Review the changes on this branch. When ready, reply to continue with the next group.
+```
+
+**Output On Full Completion**
 
 ```
 ## Implementation Complete
@@ -113,10 +168,9 @@ Working on task 4/7: <task description>
 **Schema:** <schema-name>
 **Progress:** 7/7 tasks complete ✓
 
-### Completed This Session
-- [x] Task 1
-- [x] Task 2
-...
+### Groups Completed
+- [x] Group 1: Data Layer (branch: feature/<change-name>-data-layer)
+- [x] Group 2: UI Components (branch: feature/<change-name>-ui-components)
 
 All tasks complete! Ready to archive this change.
 ```
@@ -128,7 +182,7 @@ All tasks complete! Ready to archive this change.
 
 **Change:** <change-name>
 **Schema:** <schema-name>
-**Progress:** 4/7 tasks complete
+**Progress:** 4/7 tasks complete (Group 2, task 1/4)
 
 ### Issue Encountered
 <description of the issue>
