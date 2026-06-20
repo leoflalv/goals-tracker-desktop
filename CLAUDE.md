@@ -24,7 +24,7 @@ Two-layer app: a React frontend (`src/`) rendered inside a Tauri 2 native shell 
 
 **Backend (`src-tauri/`)** — Rust. Logic lives in `src-tauri/src/lib.rs`; `main.rs` just calls `run()`. Rust commands are registered in `lib.rs` via `tauri::generate_handler![]` and called from the frontend with `@tauri-apps/api`'s `invoke()`.
 
-**Window characteristics** — 320×480px, transparent, no decorations, not resizable, positioned top-left. This is a widget-style always-visible overlay; the UI must draw its own drag handle and visual chrome since the OS titlebar is disabled.
+**Window characteristics** — transparent, no decorations, positioned top-left. Window dimensions are flexible and will be adjusted as the UI is built. This is a widget-style always-visible overlay; the UI must draw its own drag handle and visual chrome since the OS titlebar is disabled.
 
 **Capabilities** — `src-tauri/capabilities/default.json` controls what the frontend window is allowed to do (currently `core:default` + `opener:default`). Add new Tauri plugin permissions here.
 
