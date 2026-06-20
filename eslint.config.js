@@ -8,9 +8,7 @@ export default tseslint.config(
 
   {
     files: ["**/*.{ts,tsx}"],
-    extends: [
-      ...tseslint.configs.recommended,
-    ],
+    extends: [...tseslint.configs.recommended],
     plugins: {
       react: reactPlugin,
       "react-hooks": reactHooksPlugin,
@@ -35,11 +33,14 @@ export default tseslint.config(
             // Section 3: Relative imports
             ["^\\."],
             // Section 4: CSS, assets, and other side-effect imports
-            ["^.+\\.(css|scss|sass|less|svg|png|jpg|jpeg|gif|webp)$", "^\\..*\\.(css|scss|sass|less|svg|png|jpg|jpeg|gif|webp)$"],
+            [
+              "^.+\\.(css|scss|sass|less|svg|png|jpg|jpeg|gif|webp)$",
+              "^\\..*\\.(css|scss|sass|less|svg|png|jpg|jpeg|gif|webp)$",
+            ],
           ],
         },
       ],
       "simple-import-sort/exports": "error",
     },
-  }
+  },
 );

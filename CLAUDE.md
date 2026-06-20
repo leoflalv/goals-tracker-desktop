@@ -26,6 +26,8 @@ Two-layer app: a React frontend (`src/`) rendered inside a Tauri 2 native shell 
 
 **Window characteristics** — transparent, no decorations, positioned top-left. Window dimensions are flexible and will be adjusted as the UI is built. This is a widget-style always-visible overlay; the UI must draw its own drag handle and visual chrome since the OS titlebar is disabled.
 
+**Platform support** — the app targets macOS and Windows. Desktop-level window positioning is platform-specific Rust code in `lib.rs`: macOS uses `NSWindowLevel` via the `cocoa` crate; Windows uses `SetWindowPos` with `HWND_BOTTOM` via `windows-rs`. Use `#[cfg(target_os = "macos")]` / `#[cfg(target_os = "windows")]` for any platform-specific branches.
+
 **Capabilities** — `src-tauri/capabilities/default.json` controls what the frontend window is allowed to do (currently `core:default` + `opener:default`). Add new Tauri plugin permissions here.
 
 **Vite dev port is fixed at 1420** — Tauri's dev config hardcodes `devUrl: http://localhost:1420`. Do not change the port.
