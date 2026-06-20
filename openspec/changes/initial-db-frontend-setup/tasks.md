@@ -1,8 +1,8 @@
 ## 1. Dependencies
 
-- [ ] 1.1 Add `tauri-plugin-sql` with the `sqlite` feature to `src-tauri/Cargo.toml` dependencies
-- [ ] 1.2 Add `rusqlite` (with `bundled` feature) to `src-tauri/Cargo.toml` under `[dev-dependencies]` for tests
-- [ ] 1.3 Add `sql:default` permission to `src-tauri/capabilities/default.json`
+- [x] 1.1 Add `tauri-plugin-sql` with the `sqlite` feature to `src-tauri/Cargo.toml` dependencies
+- [x] 1.2 Add `rusqlite` (with `bundled` feature) to `src-tauri/Cargo.toml` under `[dev-dependencies]` for tests
+- [x] 1.3 Add `sql:default` permission to `src-tauri/capabilities/default.json`
 
 ## 2. Database Schema & Plugin Registration
 
