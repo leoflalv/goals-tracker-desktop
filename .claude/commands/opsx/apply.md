@@ -63,49 +63,53 @@ Implement tasks from an OpenSpec change.
    - Remaining tasks overview
    - Dynamic instruction from CLI
 
-6. **Identify task groups**
+6. **Identify specs and their tasks**
 
-   Parse `tasks.md` for `## Group:` section headers — each header defines one group.
-   If no groups exist, cluster the remaining tasks into logical groups yourself, announce the grouping to the user, and ask for confirmation before proceeding.
+   From `contextFiles`, list the spec files in the change (e.g., `specs/<spec-name>/spec.md`).
+   Parse `tasks.md` to map tasks to their spec — tasks are organized under section headers that correspond to spec names.
+   If task-to-spec mapping is ambiguous, announce the mapping you infer and ask for confirmation.
 
-   Show the full group plan upfront:
+   Show the implementation plan upfront:
    ```
-   Groups to implement:
-   1. <Group A> (N tasks)
-   2. <Group B> (M tasks)
+   Specs to implement:
+   1. <spec-name-a> (N tasks)
+   2. <spec-name-b> (M tasks)
    ...
    ```
 
-7. **Implement one group at a time**
+7. **Implement one spec at a time**
 
-   For each pending group, in order:
+   For each pending spec, in order:
 
-   a. **Create a git branch for the group**
+   a. **Create a git branch for the spec**
       ```bash
-      git checkout -b feature/<change-name>-<group-kebab-name>
+      git checkout -b feature/<change-name>-<spec-name>
       ```
-      Derive `<group-kebab-name>` from the group header (e.g., "Data Layer" → `data-layer`).
-      Announce: "Created branch: `feature/<change-name>-<group-kebab-name>`"
+      `<spec-name>` is the spec's directory name in kebab-case (e.g., `habit-management`).
+      Announce: "Created branch: `feature/<change-name>-<spec-name>`"
 
-   b. **Implement all tasks in the group**
+   b. **Read the spec file** before implementing its tasks, so all code decisions align with the spec.
+
+   c. **Implement all tasks for this spec**
+      - Tasks within a spec may be organized into sub-groups for clarity — implement them in order
       - Show which task is being worked on
       - Make the code changes required
       - Keep changes minimal and focused
       - Mark task complete in tasks.md: `- [ ]` → `- [x]`
 
-   c. **After completing the group, pause and report**
+   d. **After completing the spec, pause and report**
       ```
-      ## Group Complete: <Group Name>
+      ## Spec Complete: <spec-name>
 
-      Branch: feature/<change-name>-<group-kebab-name>
+      Branch: feature/<change-name>-<spec-name>
       Tasks completed: N
       Files changed: <list>
 
-      Review the changes on this branch. When ready, reply to continue with the next group.
+      Review the changes on this branch. When ready, reply to continue with the next spec.
       ```
-      **Wait for the user to respond before starting the next group.**
+      **Wait for the user to respond before starting the next spec.**
 
-   **Pause mid-group if:**
+   **Pause mid-spec if:**
    - Task is unclear → ask for clarification
    - Implementation reveals a design issue → suggest updating artifacts
    - Error or blocker encountered → report and wait for guidance
@@ -114,7 +118,7 @@ Implement tasks from an OpenSpec change.
 8. **On full completion, show status**
 
    Display:
-   - All groups and tasks completed
+   - All specs and tasks completed
    - Overall progress: "N/M tasks complete"
    - Suggest archive with `/opsx:archive`
 
@@ -123,14 +127,14 @@ Implement tasks from an OpenSpec change.
 ```
 ## Implementing: <change-name> (schema: <schema-name>)
 
-Groups to implement:
-1. Data Layer (3 tasks)
-2. UI Components (4 tasks)
+Specs to implement:
+1. habit-management (3 tasks)
+2. habit-ui (4 tasks)
 
 ---
 
-### Group 1/2: Data Layer
-Branch: feature/<change-name>-data-layer
+### Spec 1/2: habit-management
+Branch: feature/<change-name>-habit-management
 
 Working on task 1/3: <task description>
 [...implementation...]
@@ -141,18 +145,18 @@ Working on task 2/3: <task description>
 ✓ Task complete
 ```
 
-**Output On Group Completion (pause point)**
+**Output On Spec Completion (pause point)**
 
 ```
-## Group Complete: <Group Name>
+## Spec Complete: <spec-name>
 
-Branch: feature/<change-name>-<group-name>
+Branch: feature/<change-name>-<spec-name>
 Tasks completed: 3/3
 Files changed:
 - src/features/goals/domain/Goal.ts
 - src-tauri/src/lib.rs
 
-Review the changes on this branch. When ready, reply to continue with the next group.
+Review the changes on this branch. When ready, reply to continue with the next spec.
 ```
 
 **Output On Full Completion**
@@ -164,9 +168,9 @@ Review the changes on this branch. When ready, reply to continue with the next g
 **Schema:** <schema-name>
 **Progress:** 7/7 tasks complete ✓
 
-### Groups Completed
-- [x] Group 1: Data Layer (branch: feature/<change-name>-data-layer)
-- [x] Group 2: UI Components (branch: feature/<change-name>-ui-components)
+### Specs Completed
+- [x] habit-management (branch: feature/<change-name>-habit-management)
+- [x] habit-ui (branch: feature/<change-name>-habit-ui)
 
 All tasks complete! You can archive this change with `/opsx:archive`.
 ```
@@ -178,7 +182,7 @@ All tasks complete! You can archive this change with `/opsx:archive`.
 
 **Change:** <change-name>
 **Schema:** <schema-name>
-**Progress:** 4/7 tasks complete (Group 2, task 1/4)
+**Progress:** 4/7 tasks complete (spec: habit-ui, task 1/4)
 
 ### Issue Encountered
 <description of the issue>
