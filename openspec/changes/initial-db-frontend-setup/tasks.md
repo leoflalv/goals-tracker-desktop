@@ -6,7 +6,7 @@
 
 ## 2. Database Schema & Plugin Registration
 
-- [x] 2.1 Register `tauri_plugin_sql` in `lib.rs` with a programmatic migration (version 1) that creates the `goals` table (`id`, `title`, `description`, `completed`, `created_at`)
+- [x] 2.1 Register `tauri_plugin_sql` in `lib.rs` with migrations loaded from `src/migrations.rs` — version 1 creates the `goals` table (`id`, `title`, `description`, `completed`, `created_at`)
 - [x] 2.2 Remove the placeholder `greet` command from `lib.rs`
 
 ## 3. Rust CRUD Commands

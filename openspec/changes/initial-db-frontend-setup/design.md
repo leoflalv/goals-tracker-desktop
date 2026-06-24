@@ -20,9 +20,9 @@ The goals-tracker-desktop app is a Tauri 2 widget. The backend is Rust; there is
 
 `tauri-plugin-sql` is the first-party Tauri plugin for database access. It handles connection management and integrates directly with Tauri's builder. Alternative considered: `rusqlite` directly — rejected because `tauri-plugin-sql` provides built-in migration versioning and is the idiomatic Tauri choice.
 
-### D2: Programmatic migrations in Rust
+### D2: Programmatic migrations in a dedicated `migrations.rs` module
 
-We use `Builder::plugin(tauri_plugin_sql::Builder::new().add_migrations(...).build())` with `MigrationKind::Up` to keep schema versions in code alongside the commands. Alternative considered: migration config in `tauri.conf.json` — rejected because keeping migrations in Rust makes the schema co-located with the commands that use it.
+Migrations are defined in `src-tauri/src/migrations.rs` and exposed via a `migrations::all()` function called from `lib.rs`. This uses `MigrationKind::Up` structs registered with `tauri_plugin_sql::Builder::add_migrations`. Keeping them in a separate file prevents `lib.rs` from growing with inline SQL as the schema evolves. Alternative considered: migration config in `tauri.conf.json` — rejected because keeping migrations in Rust makes the schema co-located with the commands that use it.
 
 ### D3: CRUD commands in Rust, not direct JS SQL
 
