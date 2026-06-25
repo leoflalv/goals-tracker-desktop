@@ -1,0 +1,37 @@
+## 1. Setup
+
+- [x] 1.1 Install `zod` as a runtime dependency (`pnpm add zod`)
+- [x] 1.2 Install `@tanstack/react-query` (`pnpm add @tanstack/react-query`)
+- [x] 1.3 Wrap app in `QueryClientProvider` in `src/main.tsx`
+
+## 2. Domain Type
+
+- [x] 2.1 Create `src/features/goals/domain/Goal.ts` with the `Goal` type alias using camelCase fields (`id`, `title`, `description`, `completed`, `createdAt`)
+- [x] 2.2 Create `src/features/goals/domain/index.ts` re-exporting `Goal`
+
+## 3. DTO and Validation
+
+- [x] 3.1 Create `src/features/goals/services/goalDto.ts` with `GoalSchema` Zod schema matching the backend `Goal` struct shape
+- [x] 3.2 Export `GoalDto` type inferred from `GoalSchema` in `goalDto.ts`
+- [x] 3.3 Export `toGoal(dto: GoalDto): Goal` map function in `goalDto.ts`
+
+## 4. Service Layer
+
+- [x] 4.1 Create `src/features/goals/services/goalService.ts` with `getGoals()` — invokes `get_goals`, validates via `GoalSchema.array().parse()`, maps with `toGoal()`, wraps IPC errors as `Error`
+- [x] 4.2 Add `createGoal(title, description?)` to `goalService.ts` — invokes `create_goal`, validates via `GoalSchema.parse()`, maps with `toGoal()`
+- [x] 4.3 Add `updateGoal(id, completed, title?, description?)` to `goalService.ts` — invokes `update_goal`, returns `Promise<void>`
+- [x] 4.4 Add `deleteGoal(id)` to `goalService.ts` — invokes `delete_goal`, returns `Promise<void>`
+
+## 5. Action Hooks
+
+- [x] 5.1 Create `src/features/goals/actions/useGetGoals.ts` — `useQuery` with `goalsQueryKey`, returns `{ goals, loading, error, refetch }`
+- [x] 5.2 Create `src/features/goals/actions/useCreateGoal.ts` — `useMutation`, invalidates `goalsQueryKey` on success, optional `onSuccess` callback
+- [x] 5.3 Create `src/features/goals/actions/useUpdateGoal.ts` — `useMutation`, invalidates `goalsQueryKey` on success, optional `onSuccess` callback
+- [x] 5.4 Create `src/features/goals/actions/useDeleteGoal.ts` — `useMutation`, invalidates `goalsQueryKey` on success, optional `onSuccess` callback
+
+## 6. Tests
+
+- [x] 6.1 Write unit tests for `goalDto.ts` (valid shape passes, invalid shape throws `ZodError`, `toGoal` maps all fields correctly)
+- [x] 6.2 Write unit tests for `goalService.ts` (mock `invoke`, verify command names, argument shapes, DTO validation path, and error wrapping)
+- [x] 6.3 Write unit tests for `useGetGoals` (mock service, assert loading transitions and error state)
+- [x] 6.4 Write unit tests for `useCreateGoal`, `useUpdateGoal`, `useDeleteGoal` (mock service, assert `onSuccess` called on success and not on failure)
