@@ -4,14 +4,14 @@
 
 ## 2. Domain Type
 
-- [x] 2.1 Create `src/features/goals/domain/Goal.ts` with the `Goal` type alias (`id`, `title`, `description`, `completed`, `created_at`)
+- [x] 2.1 Create `src/features/goals/domain/Goal.ts` with the `Goal` type alias using camelCase fields (`id`, `title`, `description`, `completed`, `createdAt`)
 - [x] 2.2 Create `src/features/goals/domain/index.ts` re-exporting `Goal`
 
 ## 3. DTO and Validation
 
-- [ ] 3.1 Create `src/features/goals/services/goalDto.ts` with `GoalSchema` Zod schema matching the backend `Goal` struct shape
-- [ ] 3.2 Export `GoalDto` type inferred from `GoalSchema` in `goalDto.ts`
-- [ ] 3.3 Export `toGoal(dto: GoalDto): Goal` map function in `goalDto.ts`
+- [x] 3.1 Create `src/features/goals/services/goalDto.ts` with `GoalSchema` Zod schema matching the backend `Goal` struct shape
+- [x] 3.2 Export `GoalDto` type inferred from `GoalSchema` in `goalDto.ts`
+- [x] 3.3 Export `toGoal(dto: GoalDto): Goal` map function in `goalDto.ts`
 
 ## 4. Service Layer
 

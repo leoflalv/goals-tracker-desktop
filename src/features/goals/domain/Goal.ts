@@ -3,5 +3,5 @@ export type Goal = {
   title: string;
   description: string | null;
   completed: boolean;
-  created_at: string;
+  createdAt: string;
 };

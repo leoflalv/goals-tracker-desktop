@@ -11,12 +11,12 @@ The system SHALL define a Zod schema `GoalSchema` in `src/features/goals/service
 - **WHEN** `GoalSchema.parse()` is called with a missing or incorrectly typed field (e.g., `id` as a string)
 - **THEN** it throws a `ZodError` describing the invalid field
 
-#### Scenario: toGoal maps all fields to domain type
+#### Scenario: toGoal maps all fields to domain type with camelCase
 - **WHEN** `toGoal(dto)` is called with a valid `GoalDto`
-- **THEN** it returns a `Goal` object with all fields correctly mapped
+- **THEN** it returns a `Goal` object with all fields correctly mapped, including `dto.created_at` mapped to `goal.createdAt`
 
 ### Requirement: Goal domain type
-The system SHALL define a `Goal` TypeScript type alias in `src/features/goals/domain/Goal.ts` that mirrors the Rust `Goal` struct: `id: number`, `title: string`, `description: string | null`, `completed: boolean`, `created_at: string`. Types (not interfaces) SHALL be used for data shapes; interfaces are reserved for describing objects with methods.
+The system SHALL define a `Goal` TypeScript type alias in `src/features/goals/domain/Goal.ts` with camelCase fields: `id: number`, `title: string`, `description: string | null`, `completed: boolean`, `createdAt: string`. All frontend model fields MUST use camelCase regardless of the backend's snake_case naming. Types (not interfaces) SHALL be used for data shapes; interfaces are reserved for describing objects with methods.
 
 #### Scenario: Type is importable from domain index
 - **WHEN** a service or hook imports from `@/features/goals/domain`
