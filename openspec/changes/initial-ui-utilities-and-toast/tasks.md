@@ -11,11 +11,19 @@
 
 ## 2. Toast System
 
-- [ ] 2.1 Install `zustand` dependency
-- [ ] 2.2 Create `src/shared/store/toastStore.ts` with Zustand store (`toasts`, `addToast`, `removeToast`) and `useToast()` hook
-- [ ] 2.3 Create `src/shared/components/Toast/ToastContainer.tsx` to read from the store and render toasts (fixed bottom-right)
-- [ ] 2.4 Export `useToast` from `src/shared/store/toastStore.ts` and `ToastContainer` from `src/shared/components/index.ts`
+- [x] 2.1 Install `zustand` dependency
+- [x] 2.2 Create `src/shared/store/toastStore.ts` with Zustand store (`toasts`, `addToast`, `removeToast`) and `useToast()` hook
+- [x] 2.3 Create `src/shared/components/Toast/ToastContainer.tsx` to read from the store and render toasts (fixed bottom-right)
+- [x] 2.4 Export `useToast` from `src/shared/store/toastStore.ts` and `ToastContainer` from `src/shared/components/index.ts`
 
 ## 3. Wire Up
 
-- [ ] 3.1 Mount `<ToastContainer />` inside `src/App.tsx` (no provider needed)
+- [x] 3.1 Mount `<ToastContainer />` inside `src/App.tsx` (no provider needed)
+
+## 4. Tests
+
+- [x] 4.1 Test `Button` — renders variants, forwards disabled state
+- [x] 4.2 Test `Input` — renders default and error states
+- [x] 4.3 Test `Spinner` — renders with correct size classes
+- [x] 4.4 Test `toastStore` — addToast adds entry, removeToast removes it, auto-dismiss fires after timeout
+- [x] 4.5 Test `ToastContainer` — renders toasts from store, renders nothing when empty, dismiss button calls removeToast
