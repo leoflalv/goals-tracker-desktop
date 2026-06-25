@@ -1,6 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
 import { z } from "zod";
 
+export const goalsQueryKey = ["goals"] as const;
+
 import type { Goal } from "@/features/goals/domain";
 import { tryCatch } from "@/shared/utils/result";
 

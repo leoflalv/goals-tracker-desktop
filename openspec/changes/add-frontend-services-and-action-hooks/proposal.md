@@ -24,6 +24,6 @@ The Rust backend exposes four Tauri commands (`create_goal`, `get_goals`, `updat
 ## Impact
 
 - New files only under `src/features/goals/` — no existing files are modified
-- Adds `zod` as a new runtime dependency
+- Adds `zod` and `@tanstack/react-query` as new runtime dependencies
 - Depends on `@tauri-apps/api` (already in deps) and the four registered Tauri handlers
 - No new Rust changes needed

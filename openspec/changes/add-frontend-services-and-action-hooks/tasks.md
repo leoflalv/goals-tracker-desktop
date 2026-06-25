@@ -1,6 +1,8 @@
 ## 1. Setup
 
 - [x] 1.1 Install `zod` as a runtime dependency (`pnpm add zod`)
+- [x] 1.2 Install `@tanstack/react-query` (`pnpm add @tanstack/react-query`)
+- [x] 1.3 Wrap app in `QueryClientProvider` in `src/main.tsx`
 
 ## 2. Domain Type
 
@@ -22,10 +24,10 @@
 
 ## 5. Action Hooks
 
-- [ ] 5.1 Create `src/features/goals/actions/useGetGoals.ts` — fetches on mount, returns `{ goals, loading, error, refetch }`
-- [ ] 5.2 Create `src/features/goals/actions/useCreateGoal.ts` — returns `{ createGoal, loading, error }` with optional `onSuccess` callback
-- [ ] 5.3 Create `src/features/goals/actions/useUpdateGoal.ts` — returns `{ updateGoal, loading, error }` with optional `onSuccess` callback
-- [ ] 5.4 Create `src/features/goals/actions/useDeleteGoal.ts` — returns `{ deleteGoal, loading, error }` with optional `onSuccess` callback
+- [x] 5.1 Create `src/features/goals/actions/useGetGoals.ts` — `useQuery` with `goalsQueryKey`, returns `{ goals, loading, error, refetch }`
+- [x] 5.2 Create `src/features/goals/actions/useCreateGoal.ts` — `useMutation`, invalidates `goalsQueryKey` on success, optional `onSuccess` callback
+- [x] 5.3 Create `src/features/goals/actions/useUpdateGoal.ts` — `useMutation`, invalidates `goalsQueryKey` on success, optional `onSuccess` callback
+- [x] 5.4 Create `src/features/goals/actions/useDeleteGoal.ts` — `useMutation`, invalidates `goalsQueryKey` on success, optional `onSuccess` callback
 
 ## 6. Tests
 

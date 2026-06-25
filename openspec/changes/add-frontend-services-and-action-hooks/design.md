@@ -41,10 +41,13 @@ Hooks call services via the same `tryCatch` utility: `const [goals, err] = await
 
 *Alternative considered*: try/catch in each service function — rejected because it is repetitive boilerplate and obscures which lines can fail.
 
-### 4. Mutation hooks accept an optional `onSuccess` callback
-After a successful mutation the hook calls `onSuccess?.()`, letting the parent (or `useGetGoals`) trigger a refetch without coupling the hooks together directly.
+### 4. TanStack Query manages all server state in hooks
+`useGetGoals` uses `useQuery`; the three mutation hooks use `useMutation`. TanStack Query owns loading, error, and caching state — hooks no longer need `useState`/`useEffect`. On every successful mutation, `queryClient.invalidateQueries({ queryKey: goalsQueryKey })` automatically re-fetches the goals list. A `goalsQueryKey` constant is exported from `goalService.ts` as the single source of truth for the cache key.
 
-*Alternative considered*: Mutation hooks internally import and call `getGoals` to refresh — rejected because it creates a hidden coupling between hooks and makes unit testing harder.
+*Alternative considered*: Manual `useState`/`useEffect` — rejected because it requires manual loading/error tracking, and coordinating refetch after mutations requires passing callbacks between hooks.
+
+### 6. Mutation hooks accept an optional `onSuccess` callback
+After a successful mutation, the `useMutation` definition invalidates the goals query (automatic refetch) and the per-call `onSuccess` callback is invoked for component-specific side effects (e.g., closing a modal). These two concerns are intentionally separated: the hook always invalidates; the component decides what else to do.
 
 ### 5. Goal type lives in `domain/Goal.ts`, re-exported from `domain/index.ts`
 Follows the feature architecture. Service and action layers import from `@/features/goals/domain`.
