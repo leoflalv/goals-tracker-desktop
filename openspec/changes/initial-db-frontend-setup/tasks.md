@@ -1,7 +1,7 @@
 ## 1. Dependencies
 
 - [x] 1.1 Add `tauri-plugin-sql` with the `sqlite` feature to `src-tauri/Cargo.toml` dependencies
-- [x] 1.2 Add `rusqlite` (with `bundled` feature) to `src-tauri/Cargo.toml` under `[dev-dependencies]` for tests
+- [x] 1.2 Add `rusqlite` (with `bundled` feature) to `src-tauri/Cargo.toml` — in `[dependencies]` (not `[dev-dependencies]`) since production command logic in `commands.rs` uses it directly
 - [x] 1.3 Add `sql:default` permission to `src-tauri/capabilities/default.json`
 
 ## 2. Database Schema & Plugin Registration
@@ -11,11 +11,11 @@
 
 ## 3. Rust CRUD Commands
 
-- [ ] 3.1 Implement `create_goal` command — validate non-empty title, insert row with current UTC timestamp as `created_at`, return the new goal with its generated `id`
-- [ ] 3.2 Implement `get_goals` command — query all rows ordered by `created_at` DESC, return as a Vec
-- [ ] 3.3 Implement `update_goal` command — update `completed` (and optionally `title`/`description`) by `id`; return error if row not found
-- [ ] 3.4 Implement `delete_goal` command — delete row by `id`; return error if row not found
-- [ ] 3.5 Register all four commands in `tauri::generate_handler![]`
+- [x] 3.1 Implement `create_goal` in `commands.rs` — validate non-empty title, insert row with current UTC timestamp as `created_at`, return the new goal with its generated `id`
+- [x] 3.2 Implement `get_goals` in `commands.rs` — query all rows ordered by `created_at` DESC, return as a Vec
+- [x] 3.3 Implement `update_goal` in `commands.rs` — update `completed` (and optionally `title`/`description`) by `id`; return error if row not found
+- [x] 3.4 Implement `delete_goal` in `commands.rs` — delete row by `id`; return error if row not found
+- [x] 3.5 Register all four Tauri command wrappers from `handlers.rs` in `tauri::generate_handler![]`
 
 ## 4. Rust Tests
 
