@@ -23,8 +23,11 @@ A Zustand store holds `toasts` state with `addToast` / `removeToast` actions. `u
 ### Toast positioning: fixed bottom-right
 The app window is positioned top-left as a widget. Fixed bottom-right toasts avoid overlapping the main content. Position can be changed later via a prop if needed.
 
+### Semantic color tokens in `App.css`
+Colors are defined once as `@theme` variables in `src/App.css` (`--color-primary`, `--color-secondary`, `--color-surface`, `--color-border`, `--color-error`, `--color-muted`). Tailwind v4 generates utilities from these automatically (`bg-primary`, `border-error`, etc.). Components reference semantic classes instead of hardcoded palette classes like `bg-blue-600` — so the palette can be changed in one place.
+
 ### Shared components as thin Tailwind wrappers
-`Button`, `Input`, and `Spinner` are small wrapper components with variant props. Variant styles are hardcoded Tailwind class strings — no merging utility needed. No external component library (e.g. Radix, shadcn) — this app is simple enough that hand-rolled primitives are sufficient.
+`Button`, `Input`, and `Spinner` are small wrapper components with variant props. Variant styles use semantic Tailwind classes from the `@theme` token set above. No external component library (e.g. Radix, shadcn) — this app is simple enough that hand-rolled primitives are sufficient.
 
 ## Risks / Trade-offs
 
