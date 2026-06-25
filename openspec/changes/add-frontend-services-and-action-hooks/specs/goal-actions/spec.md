@@ -8,7 +8,7 @@ The system SHALL export a `useGetGoals()` React hook from `src/features/goals/ac
 - **THEN** `loading` is `true` initially, then becomes `false` once data arrives, and `goals` is populated
 
 #### Scenario: Backend error sets error field
-- **WHEN** `getGoals()` rejects
+- **WHEN** `getGoals()` throws (via `tryCatch` catching the error inside the hook)
 - **THEN** `loading` becomes `false`, `error` contains the error message, and `goals` remains empty
 
 #### Scenario: refetch re-triggers the fetch
@@ -23,7 +23,7 @@ The system SHALL export a `useCreateGoal()` React hook from `src/features/goals/
 - **THEN** `loading` transitions from `true` to `false` and `onSuccess` is called
 
 #### Scenario: Failed create sets error
-- **WHEN** `createGoal("")` is called and the backend rejects
+- **WHEN** `createGoal("")` is called and the service throws
 - **THEN** `error` is set to the error message and `onSuccess` is NOT called
 
 ### Requirement: useUpdateGoal hook

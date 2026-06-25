@@ -15,10 +15,10 @@
 
 ## 4. Service Layer
 
-- [ ] 4.1 Create `src/features/goals/services/goalService.ts` with `getGoals()` — invokes `get_goals`, validates via `GoalSchema.array().parse()`, maps with `toGoal()`, wraps IPC errors as `Error`
-- [ ] 4.2 Add `createGoal(title, description?)` to `goalService.ts` — invokes `create_goal`, validates via `GoalSchema.parse()`, maps with `toGoal()`
-- [ ] 4.3 Add `updateGoal(id, completed, title?, description?)` to `goalService.ts` — invokes `update_goal`, returns `Promise<void>`
-- [ ] 4.4 Add `deleteGoal(id)` to `goalService.ts` — invokes `delete_goal`, returns `Promise<void>`
+- [x] 4.1 Create `src/features/goals/services/goalService.ts` with `getGoals()` — invokes `get_goals`, validates via `GoalSchema.array().parse()`, maps with `toGoal()`, wraps IPC errors as `Error`
+- [x] 4.2 Add `createGoal(title, description?)` to `goalService.ts` — invokes `create_goal`, validates via `GoalSchema.parse()`, maps with `toGoal()`
+- [x] 4.3 Add `updateGoal(id, completed, title?, description?)` to `goalService.ts` — invokes `update_goal`, returns `Promise<void>`
+- [x] 4.4 Add `deleteGoal(id)` to `goalService.ts` — invokes `delete_goal`, returns `Promise<void>`
 
 ## 5. Action Hooks
 

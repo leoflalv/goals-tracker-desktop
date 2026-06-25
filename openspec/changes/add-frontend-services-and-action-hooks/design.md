@@ -31,15 +31,25 @@ CLAUDE.md explicitly names `useGetGoals` and `useCreateGoal` as canonical exampl
 
 *Alternative considered*: `useGoals` returning all operations — rejected because it forces all consumers to import all operations even when only one is needed.
 
-### 3. Mutation hooks accept an optional `onSuccess` callback
+### 3. No try/catch blocks — `tryCatch` + `safeParse` inside services, `tryCatch` in hooks
+Service functions return plain data (`Promise<Goal[]>`, `Promise<Goal>`, `Promise<void>`) and throw on error — their public API is unchanged. Internally, instead of try/catch blocks, they use two mechanisms:
+
+1. `tryCatch(promise)` from `src/shared/utils/result.ts` — wraps an `invoke()` call into a `readonly [T, null] | readonly [null, Error]` tuple. The service destructures and rethrows: `const [raw, err] = await tryCatch(invoke(...)); if (err) throw err;`
+2. `schema.safeParse(raw)` — returns `{ success, data, error }` instead of throwing. The service checks `if (!parsed.success) throw parsed.error`.
+
+Hooks call services via the same `tryCatch` utility: `const [goals, err] = await tryCatch(getGoals())`. This means no try/catch syntax anywhere in the codebase.
+
+*Alternative considered*: try/catch in each service function — rejected because it is repetitive boilerplate and obscures which lines can fail.
+
+### 4. Mutation hooks accept an optional `onSuccess` callback
 After a successful mutation the hook calls `onSuccess?.()`, letting the parent (or `useGetGoals`) trigger a refetch without coupling the hooks together directly.
 
 *Alternative considered*: Mutation hooks internally import and call `getGoals` to refresh — rejected because it creates a hidden coupling between hooks and makes unit testing harder.
 
-### 4. Goal type lives in `domain/Goal.ts`, re-exported from `domain/index.ts`
+### 5. Goal type lives in `domain/Goal.ts`, re-exported from `domain/index.ts`
 Follows the feature architecture. Service and action layers import from `@/features/goals/domain`.
 
-### 5. Zod DTO validation at the service boundary, co-located in `goalDto.ts`
+### 6. Zod DTO validation at the service boundary, co-located in `goalDto.ts`
 Each response from `invoke()` passes through `GoalSchema.parse()` (or `GoalSchema.array().parse()`) before the service function returns. If the backend shape ever diverges from what the frontend expects, a `ZodError` is thrown immediately at the boundary rather than silently producing undefined fields deep in the UI.
 
 The DTO file (`src/features/goals/services/goalDto.ts`) owns three things: the Zod schema, the inferred `GoalDto` type, and a `toGoal(dto: GoalDto): Goal` map function. Keeping schema + mapper together avoids the schema and mapping logic drifting apart. The service file stays clean: call `invoke`, parse through DTO, map to domain.
