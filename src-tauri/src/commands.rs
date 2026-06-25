@@ -97,3 +97,94 @@ pub fn delete_goal(conn: &Connection, id: i64) -> Result<(), String> {
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use rusqlite::{params, Connection};
+
+    use super::*;
+
+    fn setup_db() -> Connection {
+        let conn = Connection::open_in_memory().unwrap();
+        conn.execute_batch(crate::migrations::migration_sql()).unwrap();
+        conn
+    }
+
+    // 4.2 — create_goal
+    #[test]
+    fn create_goal_valid_title_inserts_row() {
+        let conn = setup_db();
+        let goal = create_goal(&conn, "Buy groceries", Some("at the market")).unwrap();
+        assert_eq!(goal.title, "Buy groceries");
+        assert_eq!(goal.description.as_deref(), Some("at the market"));
+        assert!(!goal.completed);
+        assert!(goal.id > 0);
+    }
+
+    #[test]
+    fn create_goal_empty_title_returns_error_without_inserting() {
+        let conn = setup_db();
+        assert!(create_goal(&conn, "   ", None).is_err());
+        assert!(get_goals(&conn).unwrap().is_empty());
+    }
+
+    // 4.3 — get_goals
+    #[test]
+    fn get_goals_returns_empty_when_no_goals() {
+        let conn = setup_db();
+        assert!(get_goals(&conn).unwrap().is_empty());
+    }
+
+    #[test]
+    fn get_goals_returns_newest_first() {
+        let conn = setup_db();
+        conn.execute(
+            "INSERT INTO goals (title, created_at) VALUES (?1, ?2)",
+            params!["Older", "2024-01-01T00:00:00+00:00"],
+        )
+        .unwrap();
+        conn.execute(
+            "INSERT INTO goals (title, created_at) VALUES (?1, ?2)",
+            params!["Newer", "2024-01-02T00:00:00+00:00"],
+        )
+        .unwrap();
+        let goals = get_goals(&conn).unwrap();
+        assert_eq!(goals.len(), 2);
+        assert_eq!(goals[0].title, "Newer");
+        assert_eq!(goals[1].title, "Older");
+    }
+
+    // 4.4 — update_goal
+    #[test]
+    fn update_goal_toggles_completed() {
+        let conn = setup_db();
+        let goal = create_goal(&conn, "Run 5k", None).unwrap();
+
+        update_goal(&conn, goal.id, true, None, None).unwrap();
+        assert!(get_goals(&conn).unwrap()[0].completed);
+
+        update_goal(&conn, goal.id, false, None, None).unwrap();
+        assert!(!get_goals(&conn).unwrap()[0].completed);
+    }
+
+    #[test]
+    fn update_goal_returns_error_for_nonexistent_id() {
+        let conn = setup_db();
+        assert!(update_goal(&conn, 999, true, None, None).is_err());
+    }
+
+    // 4.5 — delete_goal
+    #[test]
+    fn delete_goal_removes_existing_row() {
+        let conn = setup_db();
+        let goal = create_goal(&conn, "Read book", None).unwrap();
+        delete_goal(&conn, goal.id).unwrap();
+        assert!(get_goals(&conn).unwrap().is_empty());
+    }
+
+    #[test]
+    fn delete_goal_returns_error_for_nonexistent_id() {
+        let conn = setup_db();
+        assert!(delete_goal(&conn, 999).is_err());
+    }
+}

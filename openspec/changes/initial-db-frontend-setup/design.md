@@ -30,7 +30,7 @@ All data access goes through named Tauri commands (`create_goal`, `get_goals`, `
 
 ### D4: Two-layer Rust module structure for testability
 
-Business logic lives in `src/commands.rs` as plain functions accepting `&rusqlite::Connection` — no Tauri types, fully testable. Tauri-specific glue (state extraction, `#[tauri::command]`) lives in `src/handlers.rs`, which calls into `commands`. `lib.rs` only contains `run()` and registers `handlers::*` in `generate_handler!`. Tests call `commands::*` directly with an in-memory rusqlite connection without spawning a full Tauri app. `rusqlite` is in `[dependencies]` (not just `[dev-dependencies]`) because the command logic used in production also relies on it.
+Business logic lives in `src/commands.rs` as plain functions accepting `&rusqlite::Connection` — no Tauri types. Tauri-specific glue (state extraction, `#[tauri::command]`) lives in `src/handlers.rs`, which delegates to `commands`. `lib.rs` only contains `run()` and registers `handlers::*` in `generate_handler!`. Tests live in `commands.rs` as a `#[cfg(test)]` module: a `setup_db()` helper opens an in-memory rusqlite connection and applies the migration SQL, then each test calls the pure functions directly. No Tauri runtime is needed. `rusqlite` is in `[dependencies]` (not just `[dev-dependencies]`) because the command logic in production also relies on it.
 
 ## Risks / Trade-offs
 

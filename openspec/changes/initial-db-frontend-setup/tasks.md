@@ -19,8 +19,8 @@
 
 ## 4. Rust Tests
 
-- [ ] 4.1 Write a test helper that creates an in-memory SQLite database and runs the schema migration
-- [ ] 4.2 Test `create_goal` — valid title inserts a row; empty title returns an error without inserting
-- [ ] 4.3 Test `get_goals` — returns empty vec when no goals; returns goals newest-first when multiple exist
-- [ ] 4.4 Test `update_goal` — toggles `completed` to true then false; returns error for non-existent id
-- [ ] 4.5 Test `delete_goal` — removes existing row; returns error for non-existent id
+- [x] 4.1 Write `setup_db()` in `commands.rs` — opens an in-memory rusqlite connection and applies the migration SQL
+- [x] 4.2 Test `create_goal` — valid title inserts a row; empty title returns an error without inserting
+- [x] 4.3 Test `get_goals` — returns empty vec when no goals; returns goals newest-first when multiple exist
+- [x] 4.4 Test `update_goal` — toggles `completed` to true then false; returns error for non-existent id
+- [x] 4.5 Test `delete_goal` — removes existing row; returns error for non-existent id

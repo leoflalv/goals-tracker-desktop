@@ -35,10 +35,7 @@ pub fn update_goal(
 }
 
 #[tauri::command]
-pub fn delete_goal(
-    state: tauri::State<'_, Mutex<Connection>>,
-    id: i64,
-) -> Result<(), String> {
+pub fn delete_goal(state: tauri::State<'_, Mutex<Connection>>, id: i64) -> Result<(), String> {
     let conn = state.lock().map_err(|e| e.to_string())?;
     commands::delete_goal(&conn, id)
 }
