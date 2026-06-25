@@ -31,7 +31,7 @@
 
 ## 6. Tests
 
-- [ ] 6.1 Write unit tests for `goalDto.ts` (valid shape passes, invalid shape throws `ZodError`, `toGoal` maps all fields correctly)
-- [ ] 6.2 Write unit tests for `goalService.ts` (mock `invoke`, verify command names, argument shapes, DTO validation path, and error wrapping)
-- [ ] 6.3 Write unit tests for `useGetGoals` (mock service, assert loading transitions and error state)
-- [ ] 6.4 Write unit tests for `useCreateGoal`, `useUpdateGoal`, `useDeleteGoal` (mock service, assert `onSuccess` called on success and not on failure)
+- [x] 6.1 Write unit tests for `goalDto.ts` (valid shape passes, invalid shape throws `ZodError`, `toGoal` maps all fields correctly)
+- [x] 6.2 Write unit tests for `goalService.ts` (mock `invoke`, verify command names, argument shapes, DTO validation path, and error wrapping)
+- [x] 6.3 Write unit tests for `useGetGoals` (mock service, assert loading transitions and error state)
+- [x] 6.4 Write unit tests for `useCreateGoal`, `useUpdateGoal`, `useDeleteGoal` (mock service, assert `onSuccess` called on success and not on failure)
