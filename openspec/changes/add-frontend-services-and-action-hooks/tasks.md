@@ -1,11 +1,11 @@
 ## 1. Setup
 
-- [ ] 1.1 Install `zod` as a runtime dependency (`pnpm add zod`)
+- [x] 1.1 Install `zod` as a runtime dependency (`pnpm add zod`)
 
 ## 2. Domain Type
 
-- [ ] 2.1 Create `src/features/goals/domain/Goal.ts` with the `Goal` interface (`id`, `title`, `description`, `completed`, `created_at`)
-- [ ] 2.2 Create `src/features/goals/domain/index.ts` re-exporting `Goal`
+- [x] 2.1 Create `src/features/goals/domain/Goal.ts` with the `Goal` type alias (`id`, `title`, `description`, `completed`, `created_at`)
+- [x] 2.2 Create `src/features/goals/domain/index.ts` re-exporting `Goal`
 
 ## 3. DTO and Validation
 

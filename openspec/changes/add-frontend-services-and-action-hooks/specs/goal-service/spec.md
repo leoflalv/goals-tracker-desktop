@@ -16,7 +16,7 @@ The system SHALL define a Zod schema `GoalSchema` in `src/features/goals/service
 - **THEN** it returns a `Goal` object with all fields correctly mapped
 
 ### Requirement: Goal domain type
-The system SHALL define a `Goal` TypeScript interface in `src/features/goals/domain/Goal.ts` that mirrors the Rust `Goal` struct: `id: number`, `title: string`, `description: string | null`, `completed: boolean`, `created_at: string`.
+The system SHALL define a `Goal` TypeScript type alias in `src/features/goals/domain/Goal.ts` that mirrors the Rust `Goal` struct: `id: number`, `title: string`, `description: string | null`, `completed: boolean`, `created_at: string`. Types (not interfaces) SHALL be used for data shapes; interfaces are reserved for describing objects with methods.
 
 #### Scenario: Type is importable from domain index
 - **WHEN** a service or hook imports from `@/features/goals/domain`
