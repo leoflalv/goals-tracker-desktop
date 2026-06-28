@@ -18,8 +18,8 @@
 
 ## 4. GoalWidget Component
 
-- [ ] 4.1 Create `src/features/goals/components/GoalWidget.tsx` — renders a drag handle strip at the top (calls `getCurrentWindow().startDragging()` on `mousedown`), then `<GoalList />`, then `<AddGoalForm />`
-- [ ] 4.2 Style drag handle with `cursor-grab` and sufficient height (≥ 20 px); wrap the widget in a transparent rounded panel matching the window chrome
+- [x] 4.1 Create `src/features/goals/components/GoalWidget.tsx` — renders a drag handle strip at the top (calls `getCurrentWindow().startDragging()` on `mousedown`), then `<GoalList />`, then `<AddGoalForm />`
+- [x] 4.2 Style drag handle with `cursor-grab` and sufficient height (≥ 20 px); wrap the widget in a transparent rounded panel matching the window chrome
 
 ## 5. Wire into App
 
