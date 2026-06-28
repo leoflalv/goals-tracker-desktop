@@ -1,9 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { useToast } from "@/shared/store/toastStore";
+
 import { goalsQueryKey, updateGoal as updateGoalService } from "../services/goalService";
 
 export function useUpdateGoal() {
   const queryClient = useQueryClient();
+  const { addToast } = useToast();
   const { mutate, isPending, error } = useMutation({
     mutationFn: ({
       id,
@@ -17,6 +20,7 @@ export function useUpdateGoal() {
       description?: string;
     }) => updateGoalService(id, completed, title, description),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: goalsQueryKey }),
+    onError: (err) => addToast({ message: err.message, variant: "error" }),
   });
 
   function updateGoal(

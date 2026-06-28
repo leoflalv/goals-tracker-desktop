@@ -24,8 +24,8 @@ describe("GoalSchema.safeParse", () => {
   });
 
   it("fails when title is missing", () => {
-    const { title: _, ...rest } = validRaw;
-    expect(GoalSchema.safeParse(rest).success).toBe(false);
+    const { id, description, completed, created_at } = validRaw;
+    expect(GoalSchema.safeParse({ id, description, completed, created_at }).success).toBe(false);
   });
 
   it("fails when completed is not a boolean", () => {
