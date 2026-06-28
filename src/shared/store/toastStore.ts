@@ -29,4 +29,7 @@ export const useToastStore = create<ToastStore>((set) => ({
     set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) })),
 }));
 
-export const useToast = () => useToastStore((state) => ({ addToast: state.addToast }));
+export const useToast = () => {
+  const addToast = useToastStore((state) => state.addToast);
+  return { addToast };
+};

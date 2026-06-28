@@ -28,6 +28,6 @@
 
 ## 6. Verify
 
-- [ ] 6.1 Run `pnpm test:run` and confirm all new and existing tests pass
-- [ ] 6.2 Run `pnpm lint` and confirm no ESLint errors
-- [ ] 6.3 Start `pnpm tauri dev` and manually verify: goals load, add form creates a goal, checkbox toggles completion, delete button removes a goal, drag handle moves the window
+- [x] 6.1 Run `pnpm test:run` and confirm all new and existing tests pass
+- [x] 6.2 Run `pnpm lint` and confirm no ESLint errors
+- [x] 6.3 Start `pnpm tauri dev` and manually verify: goals load, add form creates a goal, checkbox toggles completion, delete button removes a goal, drag handle moves the window
