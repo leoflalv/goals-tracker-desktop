@@ -6,9 +6,9 @@
 
 ## 2. GoalList Component
 
-- [ ] 2.1 Create `src/features/goals/components/GoalList.tsx` — renders a `<Spinner />` when loading, an empty-state message when the list is empty, and a `GoalCard` for each goal otherwise
-- [ ] 2.2 Apply `max-h` + `overflow-y-auto` on the list container to prevent unbounded widget growth
-- [ ] 2.3 Write `GoalList.test.tsx` — test loading state shows spinner, empty state shows message, goals list renders correct number of cards
+- [x] 2.1 Create `src/features/goals/components/GoalList.tsx` — renders a `<Spinner />` when loading, an empty-state message when the list is empty, and a `GoalCard` for each goal otherwise
+- [x] 2.2 Apply `max-h` + `overflow-y-auto` on the list container to prevent unbounded widget growth
+- [x] 2.3 Write `GoalList.test.tsx` — test loading state shows spinner, empty state shows message, goals list renders correct number of cards
 
 ## 3. AddGoalForm Component
 
