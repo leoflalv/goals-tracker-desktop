@@ -23,8 +23,8 @@
 
 ## 5. Wire into App
 
-- [ ] 5.1 Update `src/App.tsx` to mount `<GoalWidget />` in place of the placeholder heading; keep `<ToastContainer />`
-- [ ] 5.2 Export all new components from `src/features/goals/components/index.ts`
+- [x] 5.1 Update `src/App.tsx` to mount `<GoalWidget />` in place of the placeholder heading; keep `<ToastContainer />`
+- [x] 5.2 Export all new components from `src/features/goals/components/index.ts`
 
 ## 6. Verify
 
