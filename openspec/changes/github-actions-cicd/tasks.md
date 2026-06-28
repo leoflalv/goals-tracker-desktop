@@ -5,9 +5,9 @@
 
 ## 2. CI Environment
 
-- [ ] 2.1 Add step to install pnpm via `pnpm/action-setup` (match version in `package.json` `packageManager` field or use `latest`)
-- [ ] 2.2 Add step to set up Node via `actions/setup-node` with `cache: 'pnpm'`
-- [ ] 2.3 Add step to install Rust stable toolchain via `dtolnay/rust-toolchain@stable`
+- [x] 2.1 Add step to install pnpm via `pnpm/action-setup` (match version in `package.json` `packageManager` field or use `latest`)
+- [x] 2.2 Add step to set up Node via `actions/setup-node` with `cache: 'pnpm'`
+- [x] 2.3 Add step to install Rust stable toolchain via `dtolnay/rust-toolchain@stable`
 
 ## 3. Build
 
