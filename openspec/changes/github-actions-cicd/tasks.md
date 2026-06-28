@@ -1,7 +1,7 @@
 ## 1. Workflow File Setup
 
-- [ ] 1.1 Create `.github/workflows/release.yml` with `on: push: tags: ['v*']` trigger
-- [ ] 1.2 Define a matrix strategy with `os: [macos-latest, windows-latest]`
+- [x] 1.1 Create `.github/workflows/release.yml` with `on: push: tags: ['v*']` trigger
+- [x] 1.2 Define a matrix strategy with `os: [macos-latest, windows-latest]`
 
 ## 2. CI Environment
 
