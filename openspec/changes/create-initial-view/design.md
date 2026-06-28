@@ -46,7 +46,9 @@ The `AddGoalForm` sits at the bottom of the widget, always visible. A "+" button
 
 ### Error surfacing
 
-Mutation errors (create, update, delete) are surfaced via the existing `useToast` Zustand store so they appear in `ToastContainer`. No inline error state is needed on individual components.
+Mutation errors (create, update, delete) are surfaced at the action layer via React Query's `onError` callback. Each action hook (`useCreateGoal`, `useUpdateGoal`, `useDeleteGoal`) calls `addToast` from `useToast()` inside `onError`. Components stay free of any error-handling or toast logic and have no `useEffect` watchers for errors.
+
+**Alternative considered:** watching the hook's `error` return value in each component with `useEffect`. Rejected because it couples error display to the component render cycle, requires boilerplate in every component that uses mutations, and makes `useEffect` dependencies fragile.
 
 ## Risks / Trade-offs
 

@@ -1,8 +1,8 @@
 ## 1. GoalCard Component
 
-- [ ] 1.1 Create `src/features/goals/components/GoalCard.tsx` — renders title, optional description, a completion checkbox (calls `useUpdateGoal` on change), and a delete button (calls `useDeleteGoal` on click)
-- [ ] 1.2 Wire mutation errors from `useUpdateGoal` and `useDeleteGoal` to the toast store via `useToast`
-- [ ] 1.3 Write `GoalCard.test.tsx` — test checkbox toggle calls update hook, delete button calls delete hook, description is only rendered when non-null
+- [x] 1.1 Create `src/features/goals/components/GoalCard.tsx` — renders title, optional description, a completion checkbox (calls `useUpdateGoal` on change), and a delete button (calls `useDeleteGoal` on click)
+- [x] 1.2 Wire mutation errors to toast via `onError` in `useCreateGoal`, `useUpdateGoal`, and `useDeleteGoal` — components own no error-handling logic
+- [x] 1.3 Write `GoalCard.test.tsx` — test checkbox toggle calls update hook, delete button calls delete hook, description is only rendered when non-null
 
 ## 2. GoalList Component
 

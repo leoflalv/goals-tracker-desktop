@@ -9,6 +9,10 @@ import { useCreateGoal } from "./useCreateGoal";
 import { useDeleteGoal } from "./useDeleteGoal";
 import { useUpdateGoal } from "./useUpdateGoal";
 
+vi.mock("@/shared/store/toastStore", () => ({
+  useToast: () => ({ addToast: vi.fn() }),
+}));
+
 vi.mock("../services/goalService", () => ({
   createGoal: vi.fn(),
   updateGoal: vi.fn(),
