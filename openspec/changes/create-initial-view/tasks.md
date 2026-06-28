@@ -12,9 +12,9 @@
 
 ## 3. AddGoalForm Component
 
-- [ ] 3.1 Create `src/features/goals/components/AddGoalForm.tsx` — controlled form with a required title `<Input />` and an optional description `<Input />`; on submit calls `useCreateGoal` and clears form on success; prevents submission when title is empty
-- [ ] 3.2 Send `undefined` (not empty string) for description when the field is blank
-- [ ] 3.3 Write `AddGoalForm.test.tsx` — test submit with title calls create, submit with empty title is blocked, form clears on success, description is optional
+- [x] 3.1 Create `src/features/goals/components/AddGoalForm.tsx` — controlled form with a required title `<Input />` and an optional description `<Input />`; on submit calls `useCreateGoal` and clears form on success; prevents submission when title is empty
+- [x] 3.2 Send `undefined` (not empty string) for description when the field is blank
+- [x] 3.3 Write `AddGoalForm.test.tsx` — test submit with title calls create, submit with empty title is blocked, form clears on success, description is optional
 
 ## 4. GoalWidget Component
 
