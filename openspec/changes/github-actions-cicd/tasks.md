@@ -11,20 +11,20 @@
 
 ## 3. Release Build
 
-- [ ] 3.1 Add `pnpm install` step to install frontend dependencies
-- [ ] 3.2 Add `pnpm test:run` step before the Tauri build; configure it to fail the job on non-zero exit
-- [ ] 3.3 Add `tauri-apps/tauri-action` step configured to build and collect installers (runs only if tests pass)
-- [ ] 3.4 Set `tagName` to use the app version from `tauri.conf.json` (e.g. `app-v__VERSION__`)
-- [ ] 3.5 Set `releaseDraft: true` so releases are created as drafts
+- [x] 3.1 Add `pnpm install` step to install frontend dependencies
+- [x] 3.2 Add `pnpm test:run` step before the Tauri build; configure it to fail the job on non-zero exit
+- [x] 3.3 Add `tauri-apps/tauri-action` step configured to build and collect installers (runs only if tests pass)
+- [x] 3.4 Set `tagName` to use the app version from `tauri.conf.json` (e.g. `app-v__VERSION__`)
+- [x] 3.5 Set `releaseDraft: true` so releases are created as drafts
 
 ## 4. PR Check Workflow
 
-- [ ] 4.1 Create `.github/workflows/pr-checks.yml` with `on: pull_request: branches: [main]` trigger
-- [ ] 4.2 Set runner to `ubuntu-latest`
-- [ ] 4.3 Add pnpm + Node setup steps (same as release workflow, no Rust needed)
-- [ ] 4.4 Add `pnpm install` step
-- [ ] 4.5 Add `pnpm test:run` step
-- [ ] 4.6 Add `pnpm lint` step
+- [x] 4.1 Create `.github/workflows/pr-checks.yml` with `on: pull_request: branches: [main]` trigger
+- [x] 4.2 Set runner to `ubuntu-latest`
+- [x] 4.3 Add pnpm + Node setup steps (same as release workflow, no Rust needed)
+- [x] 4.4 Add `pnpm install` step
+- [x] 4.5 Add `pnpm test:run` step
+- [x] 4.6 Add `pnpm lint` step
 - [ ] 4.7 Enable branch protection on `main` in GitHub repo settings and add the PR check job as a required status check
 
 ## 5. Verification
