@@ -45,8 +45,8 @@ jobs:
             --draft
           release_id=$(gh release view ${{ github.ref_name }} \
             --repo ${{ github.repository }} \
-            --json id \
-            --jq '.id')
+            --json databaseId \
+            --jq '.databaseId')
           echo "id=$release_id" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
