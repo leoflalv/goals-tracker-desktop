@@ -21,7 +21,7 @@ The app is a Tauri 2 desktop widget built with React + TypeScript (pnpm) and a R
 
 ### 1. Tag-based trigger (`push: tags: v*`) over branch trigger
 
-**Decision**: Trigger on git tag pushes matching `v*` (e.g. `v1.0.0`), not on every push to `main`.
+**Decision**: Trigger on git tag pushes matching `v*` (e.g. `v1.0.0`), not on every push to `main`
 
 **Rationale**: Gives intentional control over when a release is cut. Not every merge warrants a release — tagging is a deliberate act. Avoids accidental releases and version collisions from merges that don't bump the version.
 
