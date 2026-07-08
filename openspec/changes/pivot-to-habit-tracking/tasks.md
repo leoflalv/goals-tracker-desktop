@@ -25,10 +25,10 @@
 
 ## 4. Frontend: habit service layer
 
-- [ ] 4.1 Add `Result`/`tryCatch` utility (or move existing one) under the new feature
-- [ ] 4.2 Add `HabitDto`/`HabitCompletionDto` Zod schemas and `toHabit()`/`toHabitCompletion()` mappers in `src/features/habits/services/`
-- [ ] 4.3 Implement `getHabits`, `createHabit`, `updateHabit`, `deleteHabit`, `toggleHabitCompletion`, `getCompletions` service functions wrapping `invoke()` calls
-- [ ] 4.4 Write `*.test.ts` unit tests for the DTO schemas/mappers (valid payload maps correctly, invalid payload fails validation) and for each service function (invokes the right command with the right args, returns mapped domain types)
+- [x] 4.1 Add `Result`/`tryCatch` utility (or move existing one) under the new feature
+- [x] 4.2 Add `HabitDto`/`HabitCompletionDto` Zod schemas and `toHabit()`/`toHabitCompletion()` mappers in `src/features/habits/services/`
+- [x] 4.3 Implement `getHabits`, `createHabit`, `updateHabit`, `deleteHabit`, `toggleHabitCompletion`, `getCompletions` service functions wrapping `invoke()` calls
+- [x] 4.4 Write `*.test.ts` unit tests for the DTO schemas/mappers (valid payload maps correctly, invalid payload fails validation) and for each service function (invokes the right command with the right args, returns mapped domain types)
 
 ## 5. Frontend: habit actions (hooks)
 
