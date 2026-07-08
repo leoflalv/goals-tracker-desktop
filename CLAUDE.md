@@ -22,7 +22,7 @@ Two-layer app: a React frontend (`src/`) rendered inside a Tauri 2 native shell 
 
 **Frontend (`src/`)** — React 19 + TypeScript + Tailwind v4. Tailwind is loaded via the `@tailwindcss/vite` plugin; there is no `tailwind.config.js`. The only CSS entry point is `src/App.css` with `@import "tailwindcss"`.
 
-**Backend (`src-tauri/`)** — Rust. Logic lives in `src-tauri/src/lib.rs`; `main.rs` just calls `run()`. Rust commands are registered in `lib.rs` via `tauri::generate_handler![]` and called from the frontend with `@tauri-apps/api`'s `invoke()`.
+**Backend (`src-tauri/`)** — Rust. Logic lives in `src-tauri/src/lib.rs`; `main.rs` just calls `run()`. Rust commands are registered in `lib.rs` via `tauri::generate_handler![]` and called from the frontend with `@tauri-apps/api`'s `invoke()`. `commands.rs`/`handlers.rs` hold data (DB CRUD) business logic and command wrappers. Commands about window/visual behavior (opening, focusing, showing/hiding windows, etc.) do not belong there — give them their own file (e.g. `windows.rs`) so data logic and window-management logic stay separate.
 
 **Window characteristics** — transparent, no decorations, positioned top-left. Window dimensions are flexible and will be adjusted as the UI is built. This is a widget-style always-visible overlay; the UI must draw its own drag handle and visual chrome since the OS titlebar is disabled.
 
@@ -45,6 +45,8 @@ src/features/goals/
 ```
 
 `src/shared/` holds cross-feature utilities, shared components, and types.
+
+**Always use the shared component design system** (`src/shared/components/`: `Button`, `Input`, `Spinner`, `TabButton`, etc.) instead of raw HTML elements (`<button>`, `<input>`, ...) in feature components. If a needed UI pattern doesn't exist yet, add it to `src/shared/components/` (extend the design system) rather than writing one-off markup in a feature.
 
 ## Import order (enforced by ESLint)
 

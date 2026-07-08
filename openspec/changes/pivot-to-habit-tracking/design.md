@@ -31,6 +31,10 @@ The app currently implements a single-window todo-list widget backed by a `goals
 
 **Capability rename over in-place modification.** The `goal-*` capabilities (`goals-database`, `goal-service`, `goal-actions`, `goal-list-view`) are removed and replaced with `habit-*` capabilities rather than modified in place, because the entity itself is changing (Goal → Habit), not just a requirement within the same entity. This keeps spec history honest: a future reader of `openspec/specs/` sees `habit-database` describing habits, not a goals-named spec that quietly became about habits.
 
+**Window/visual Rust commands live in their own file, separate from data commands.** `commands.rs`/`handlers.rs` are for DB CRUD business logic. Anything about showing/focusing/hiding windows (e.g. `open_manage_window`) lives in `windows.rs` instead — added during group 7 after initially (incorrectly) placing it alongside the habit commands. Any further window-management commands (groups 8/9 shouldn't need any, but future changes might) belong there too. See `CLAUDE.md`.
+
+**Frontend always composes from `src/shared/components/`, never raw HTML elements.** `Button`, `Input`, `Spinner`, `TabButton`, etc. — if a needed UI pattern is missing (as `TabButton` was for the Manage Window's tabs), add it to the shared design system rather than writing one-off markup in a feature component. Applies to the remaining My Habits (group 8) and History (group 9) work in this change. See `CLAUDE.md`.
+
 ## Risks / Trade-offs
 
 - [Existing local `goals.db` data is discarded] → Acceptable since the product is pre-release and PRODUCT.md's `README.md` "Features" list already advertises the habit-tracking behavior as current, implying no real user data exists yet to preserve. Confirm with user before implementation if this assumption is wrong.

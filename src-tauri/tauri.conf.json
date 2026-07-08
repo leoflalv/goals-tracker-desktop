@@ -13,6 +13,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
+        "label": "main",
         "title": "Goals Tracker",
         "width": 320,
         "height": 480,
@@ -22,6 +23,16 @@
         "alwaysOnTop": false,
         "transparent": true,
         "resizable": false
+      },
+      {
+        "label": "manage",
+        "title": "Goals Tracker — Manage",
+        "width": 480,
+        "height": 600,
+        "decorations": true,
+        "transparent": false,
+        "resizable": true,
+        "visible": false
       }
     ],
     "security": {

@@ -50,12 +50,12 @@
 
 ## 7. Manage Window shell
 
-- [ ] 7.1 Add a second window definition in `tauri.conf.json` for the Manage Window (titlebar, closeable, not desktop-level)
-- [ ] 7.2 Add the Rust-side command/logic to open or focus the Manage Window from the gear icon click
-- [ ] 7.3 Add a window-label-based split in the frontend entry point so the Manage Window renders its own root component instead of the widget
-- [ ] 7.4 Build the tab navigation shell (My Habits default, History) inside the Manage Window root
-- [ ] 7.5 Write Rust tests for the open-or-focus-existing-window command logic
-- [ ] 7.6 Write `*.test.tsx` component tests for the tab shell: My Habits selected by default, switching to History shows its content and hides My Habits
+- [x] 7.1 Add a second window definition in `tauri.conf.json` for the Manage Window (titlebar, closeable, not desktop-level)
+- [x] 7.2 Add the Rust-side command/logic to open or focus the Manage Window from the gear icon click
+- [x] 7.3 Add a window-label-based split in the frontend entry point so the Manage Window renders its own root component instead of the widget
+- [x] 7.4 Build the tab navigation shell (My Habits default, History) inside the Manage Window root
+- [x] 7.5 Write Rust tests for the open-or-focus-existing-window command logic
+- [x] 7.6 Write `*.test.tsx` component tests for the tab shell: My Habits selected by default, switching to History shows its content and hides My Habits
 
 ## 8. My Habits tab
 
