@@ -1,41 +1,80 @@
 use std::sync::Mutex;
 
 use rusqlite::Connection;
+use tauri::{AppHandle, Emitter};
 
 use crate::commands;
 
-#[tauri::command]
-pub fn create_goal(
-    state: tauri::State<'_, Mutex<Connection>>,
-    title: String,
-    description: Option<String>,
-) -> Result<commands::Goal, String> {
-    let conn = state.lock().map_err(|e| e.to_string())?;
-    commands::create_goal(&conn, &title, description.as_deref())
+fn notify_habits_changed(app: &AppHandle) {
+    let _ = app.emit("habits:changed", ());
 }
 
 #[tauri::command]
-pub fn get_goals(
+pub fn create_habit(
     state: tauri::State<'_, Mutex<Connection>>,
-) -> Result<Vec<commands::Goal>, String> {
+    app: AppHandle,
+    name: String,
+    color: String,
+) -> Result<commands::Habit, String> {
     let conn = state.lock().map_err(|e| e.to_string())?;
-    commands::get_goals(&conn)
+    let habit = commands::create_habit(&conn, &name, &color)?;
+    notify_habits_changed(&app);
+    Ok(habit)
 }
 
 #[tauri::command]
-pub fn update_goal(
+pub fn get_habits(
     state: tauri::State<'_, Mutex<Connection>>,
-    id: i64,
-    completed: bool,
-    title: Option<String>,
-    description: Option<String>,
+) -> Result<Vec<commands::Habit>, String> {
+    let conn = state.lock().map_err(|e| e.to_string())?;
+    commands::get_habits(&conn)
+}
+
+#[tauri::command]
+pub fn update_habit(
+    state: tauri::State<'_, Mutex<Connection>>,
+    app: AppHandle,
+    id: String,
+    name: Option<String>,
+    color: Option<String>,
+) -> Result<commands::Habit, String> {
+    let conn = state.lock().map_err(|e| e.to_string())?;
+    let habit = commands::update_habit(&conn, &id, name.as_deref(), color.as_deref())?;
+    notify_habits_changed(&app);
+    Ok(habit)
+}
+
+#[tauri::command]
+pub fn delete_habit(
+    state: tauri::State<'_, Mutex<Connection>>,
+    app: AppHandle,
+    id: String,
 ) -> Result<(), String> {
     let conn = state.lock().map_err(|e| e.to_string())?;
-    commands::update_goal(&conn, id, completed, title.as_deref(), description.as_deref())
+    commands::delete_habit(&conn, &id)?;
+    notify_habits_changed(&app);
+    Ok(())
 }
 
 #[tauri::command]
-pub fn delete_goal(state: tauri::State<'_, Mutex<Connection>>, id: i64) -> Result<(), String> {
+pub fn toggle_habit_completion(
+    state: tauri::State<'_, Mutex<Connection>>,
+    app: AppHandle,
+    habit_id: String,
+    date: String,
+) -> Result<commands::ToggleResult, String> {
     let conn = state.lock().map_err(|e| e.to_string())?;
-    commands::delete_goal(&conn, id)
+    let result = commands::toggle_habit_completion(&conn, &habit_id, &date)?;
+    notify_habits_changed(&app);
+    Ok(result)
+}
+
+#[tauri::command]
+pub fn get_completions(
+    state: tauri::State<'_, Mutex<Connection>>,
+    from: String,
+    to: String,
+) -> Result<Vec<commands::HabitCompletion>, String> {
+    let conn = state.lock().map_err(|e| e.to_string())?;
+    commands::get_completions(&conn, &from, &to)
 }

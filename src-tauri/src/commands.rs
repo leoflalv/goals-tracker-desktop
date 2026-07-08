@@ -1,107 +1,207 @@
 use rusqlite::{params, Connection};
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Goal {
-    pub id: i64,
-    pub title: String,
-    pub description: Option<String>,
-    pub completed: bool,
+pub struct Habit {
+    pub id: String,
+    pub name: String,
+    pub color: String,
+    pub sort_order: i64,
     pub created_at: String,
+    pub deleted_at: Option<String>,
 }
 
-pub fn create_goal(
-    conn: &Connection,
-    title: &str,
-    description: Option<&str>,
-) -> Result<Goal, String> {
-    let title = title.trim();
-    if title.is_empty() {
-        return Err("title cannot be empty".into());
+#[derive(Debug, Serialize, Deserialize)]
+pub struct HabitCompletion {
+    pub id: String,
+    pub habit_id: String,
+    pub completed_on: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ToggleResult {
+    pub completed: bool,
+}
+
+fn next_sort_order(conn: &Connection) -> Result<i64, String> {
+    conn.query_row("SELECT COALESCE(MAX(sort_order), -1) + 1 FROM habits", [], |row| {
+        row.get(0)
+    })
+    .map_err(|e| e.to_string())
+}
+
+pub fn create_habit(conn: &Connection, name: &str, color: &str) -> Result<Habit, String> {
+    let name = name.trim();
+    if name.is_empty() {
+        return Err("name cannot be empty".into());
     }
+    if color.trim().is_empty() {
+        return Err("color cannot be empty".into());
+    }
+    let id = Uuid::new_v4().to_string();
     let created_at = chrono::Utc::now().to_rfc3339();
+    let sort_order = next_sort_order(conn)?;
     conn.execute(
-        "INSERT INTO goals (title, description, created_at) VALUES (?1, ?2, ?3)",
-        params![title, description, created_at],
+        "INSERT INTO habits (id, name, color, sort_order, created_at) VALUES (?1, ?2, ?3, ?4, ?5)",
+        params![id, name, color, sort_order, created_at],
     )
     .map_err(|e| e.to_string())?;
-    Ok(Goal {
-        id: conn.last_insert_rowid(),
-        title: title.to_string(),
-        description: description.map(str::to_string),
-        completed: false,
+    Ok(Habit {
+        id,
+        name: name.to_string(),
+        color: color.to_string(),
+        sort_order,
         created_at,
+        deleted_at: None,
     })
 }
 
-pub fn get_goals(conn: &Connection) -> Result<Vec<Goal>, String> {
+pub fn get_habits(conn: &Connection) -> Result<Vec<Habit>, String> {
     let mut stmt = conn
         .prepare(
-            "SELECT id, title, description, completed, created_at \
-             FROM goals ORDER BY created_at DESC",
+            "SELECT id, name, color, sort_order, created_at, deleted_at \
+             FROM habits WHERE deleted_at IS NULL ORDER BY sort_order",
         )
         .map_err(|e| e.to_string())?;
-    let goals: Result<Vec<Goal>, rusqlite::Error> = stmt
+    let habits: Result<Vec<Habit>, rusqlite::Error> = stmt
         .query_map([], |row| {
-            Ok(Goal {
+            Ok(Habit {
                 id: row.get(0)?,
-                title: row.get(1)?,
-                description: row.get(2)?,
-                completed: row.get::<_, i64>(3)? != 0,
+                name: row.get(1)?,
+                color: row.get(2)?,
+                sort_order: row.get(3)?,
                 created_at: row.get(4)?,
+                deleted_at: row.get(5)?,
             })
         })
         .map_err(|e| e.to_string())?
         .collect();
-    goals.map_err(|e| e.to_string())
+    habits.map_err(|e| e.to_string())
 }
 
-pub fn update_goal(
+fn get_habit(conn: &Connection, id: &str) -> Result<Habit, String> {
+    conn.query_row(
+        "SELECT id, name, color, sort_order, created_at, deleted_at FROM habits WHERE id = ?1",
+        params![id],
+        |row| {
+            Ok(Habit {
+                id: row.get(0)?,
+                name: row.get(1)?,
+                color: row.get(2)?,
+                sort_order: row.get(3)?,
+                created_at: row.get(4)?,
+                deleted_at: row.get(5)?,
+            })
+        },
+    )
+    .map_err(|_| format!("habit {id} not found"))
+}
+
+pub fn update_habit(
     conn: &Connection,
-    id: i64,
-    completed: bool,
-    title: Option<&str>,
-    description: Option<&str>,
-) -> Result<(), String> {
-    let rows = match (title, description) {
-        (None, None) => conn.execute(
-            "UPDATE goals SET completed = ?1 WHERE id = ?2",
-            params![completed as i64, id],
-        ),
-        (Some(t), None) => conn.execute(
-            "UPDATE goals SET completed = ?1, title = ?2 WHERE id = ?3",
-            params![completed as i64, t, id],
-        ),
-        (None, Some(d)) => conn.execute(
-            "UPDATE goals SET completed = ?1, description = ?2 WHERE id = ?3",
-            params![completed as i64, d, id],
-        ),
-        (Some(t), Some(d)) => conn.execute(
-            "UPDATE goals SET completed = ?1, title = ?2, description = ?3 WHERE id = ?4",
-            params![completed as i64, t, d, id],
-        ),
+    id: &str,
+    name: Option<&str>,
+    color: Option<&str>,
+) -> Result<Habit, String> {
+    // Ensure the habit exists before (and after a no-op update) so unknown ids always error.
+    get_habit(conn, id)?;
+
+    match (name, color) {
+        (None, None) => {}
+        (Some(n), None) => {
+            conn.execute("UPDATE habits SET name = ?1 WHERE id = ?2", params![n, id])
+                .map_err(|e| e.to_string())?;
+        }
+        (None, Some(c)) => {
+            conn.execute("UPDATE habits SET color = ?1 WHERE id = ?2", params![c, id])
+                .map_err(|e| e.to_string())?;
+        }
+        (Some(n), Some(c)) => {
+            conn.execute(
+                "UPDATE habits SET name = ?1, color = ?2 WHERE id = ?3",
+                params![n, c, id],
+            )
+            .map_err(|e| e.to_string())?;
+        }
     }
-    .map_err(|e| e.to_string())?;
-    if rows == 0 {
-        return Err(format!("goal {id} not found"));
-    }
-    Ok(())
+    get_habit(conn, id)
 }
 
-pub fn delete_goal(conn: &Connection, id: i64) -> Result<(), String> {
+pub fn delete_habit(conn: &Connection, id: &str) -> Result<(), String> {
+    let deleted_at = chrono::Utc::now().to_rfc3339();
     let rows = conn
-        .execute("DELETE FROM goals WHERE id = ?1", params![id])
+        .execute(
+            "UPDATE habits SET deleted_at = ?1 WHERE id = ?2",
+            params![deleted_at, id],
+        )
         .map_err(|e| e.to_string())?;
     if rows == 0 {
-        return Err(format!("goal {id} not found"));
+        return Err(format!("habit {id} not found"));
     }
     Ok(())
+}
+
+pub fn toggle_habit_completion(
+    conn: &Connection,
+    habit_id: &str,
+    date: &str,
+) -> Result<ToggleResult, String> {
+    let existing: Option<String> = conn
+        .query_row(
+            "SELECT id FROM habit_completions WHERE habit_id = ?1 AND completed_on = ?2",
+            params![habit_id, date],
+            |row| row.get(0),
+        )
+        .ok();
+
+    match existing {
+        Some(completion_id) => {
+            conn.execute(
+                "DELETE FROM habit_completions WHERE id = ?1",
+                params![completion_id],
+            )
+            .map_err(|e| e.to_string())?;
+            Ok(ToggleResult { completed: false })
+        }
+        None => {
+            let id = Uuid::new_v4().to_string();
+            conn.execute(
+                "INSERT INTO habit_completions (id, habit_id, completed_on) VALUES (?1, ?2, ?3)",
+                params![id, habit_id, date],
+            )
+            .map_err(|e| e.to_string())?;
+            Ok(ToggleResult { completed: true })
+        }
+    }
+}
+
+pub fn get_completions(
+    conn: &Connection,
+    from: &str,
+    to: &str,
+) -> Result<Vec<HabitCompletion>, String> {
+    let mut stmt = conn
+        .prepare(
+            "SELECT id, habit_id, completed_on FROM habit_completions \
+             WHERE completed_on BETWEEN ?1 AND ?2 ORDER BY completed_on",
+        )
+        .map_err(|e| e.to_string())?;
+    let completions: Result<Vec<HabitCompletion>, rusqlite::Error> = stmt
+        .query_map(params![from, to], |row| {
+            Ok(HabitCompletion {
+                id: row.get(0)?,
+                habit_id: row.get(1)?,
+                completed_on: row.get(2)?,
+            })
+        })
+        .map_err(|e| e.to_string())?
+        .collect();
+    completions.map_err(|e| e.to_string())
 }
 
 #[cfg(test)]
 mod tests {
-    use rusqlite::{params, Connection};
-
     use super::*;
 
     fn setup_db() -> Connection {
@@ -110,81 +210,123 @@ mod tests {
         conn
     }
 
-    // 4.2 — create_goal
+    // create_habit
     #[test]
-    fn create_goal_valid_title_inserts_row() {
+    fn create_habit_valid_inputs_inserts_row() {
         let conn = setup_db();
-        let goal = create_goal(&conn, "Buy groceries", Some("at the market")).unwrap();
-        assert_eq!(goal.title, "Buy groceries");
-        assert_eq!(goal.description.as_deref(), Some("at the market"));
-        assert!(!goal.completed);
-        assert!(goal.id > 0);
+        let habit = create_habit(&conn, "Morning workout", "#ff0000").unwrap();
+        assert_eq!(habit.name, "Morning workout");
+        assert_eq!(habit.color, "#ff0000");
+        assert_eq!(habit.sort_order, 0);
+        assert!(habit.deleted_at.is_none());
     }
 
     #[test]
-    fn create_goal_empty_title_returns_error_without_inserting() {
+    fn create_habit_assigns_increasing_sort_order() {
         let conn = setup_db();
-        assert!(create_goal(&conn, "   ", None).is_err());
-        assert!(get_goals(&conn).unwrap().is_empty());
-    }
-
-    // 4.3 — get_goals
-    #[test]
-    fn get_goals_returns_empty_when_no_goals() {
-        let conn = setup_db();
-        assert!(get_goals(&conn).unwrap().is_empty());
+        let first = create_habit(&conn, "First", "#111111").unwrap();
+        let second = create_habit(&conn, "Second", "#222222").unwrap();
+        assert_eq!(first.sort_order, 0);
+        assert_eq!(second.sort_order, 1);
     }
 
     #[test]
-    fn get_goals_returns_newest_first() {
+    fn create_habit_empty_name_returns_error() {
         let conn = setup_db();
-        conn.execute(
-            "INSERT INTO goals (title, created_at) VALUES (?1, ?2)",
-            params!["Older", "2024-01-01T00:00:00+00:00"],
-        )
-        .unwrap();
-        conn.execute(
-            "INSERT INTO goals (title, created_at) VALUES (?1, ?2)",
-            params!["Newer", "2024-01-02T00:00:00+00:00"],
-        )
-        .unwrap();
-        let goals = get_goals(&conn).unwrap();
-        assert_eq!(goals.len(), 2);
-        assert_eq!(goals[0].title, "Newer");
-        assert_eq!(goals[1].title, "Older");
+        assert!(create_habit(&conn, "   ", "#ff0000").is_err());
+        assert!(get_habits(&conn).unwrap().is_empty());
     }
 
-    // 4.4 — update_goal
+    // get_habits
     #[test]
-    fn update_goal_toggles_completed() {
+    fn get_habits_returns_empty_when_none() {
         let conn = setup_db();
-        let goal = create_goal(&conn, "Run 5k", None).unwrap();
-
-        update_goal(&conn, goal.id, true, None, None).unwrap();
-        assert!(get_goals(&conn).unwrap()[0].completed);
-
-        update_goal(&conn, goal.id, false, None, None).unwrap();
-        assert!(!get_goals(&conn).unwrap()[0].completed);
+        assert!(get_habits(&conn).unwrap().is_empty());
     }
 
     #[test]
-    fn update_goal_returns_error_for_nonexistent_id() {
+    fn get_habits_excludes_soft_deleted() {
         let conn = setup_db();
-        assert!(update_goal(&conn, 999, true, None, None).is_err());
+        let habit = create_habit(&conn, "Read", "#00ff00").unwrap();
+        delete_habit(&conn, &habit.id).unwrap();
+        assert!(get_habits(&conn).unwrap().is_empty());
     }
 
-    // 4.5 — delete_goal
+    // update_habit
     #[test]
-    fn delete_goal_removes_existing_row() {
+    fn update_habit_changes_name_and_color() {
         let conn = setup_db();
-        let goal = create_goal(&conn, "Read book", None).unwrap();
-        delete_goal(&conn, goal.id).unwrap();
-        assert!(get_goals(&conn).unwrap().is_empty());
+        let habit = create_habit(&conn, "Read", "#00ff00").unwrap();
+        let updated = update_habit(&conn, &habit.id, Some("Read daily"), Some("#0000ff")).unwrap();
+        assert_eq!(updated.name, "Read daily");
+        assert_eq!(updated.color, "#0000ff");
     }
 
     #[test]
-    fn delete_goal_returns_error_for_nonexistent_id() {
+    fn update_habit_unknown_id_returns_error() {
         let conn = setup_db();
-        assert!(delete_goal(&conn, 999).is_err());
+        assert!(update_habit(&conn, "does-not-exist", Some("X"), None).is_err());
+    }
+
+    // delete_habit
+    #[test]
+    fn delete_habit_preserves_completions() {
+        let conn = setup_db();
+        let habit = create_habit(&conn, "Cold shower", "#00aaff").unwrap();
+        toggle_habit_completion(&conn, &habit.id, "2026-07-01").unwrap();
+        delete_habit(&conn, &habit.id).unwrap();
+        let completions = get_completions(&conn, "2026-07-01", "2026-07-01").unwrap();
+        assert_eq!(completions.len(), 1);
+        assert_eq!(completions[0].habit_id, habit.id);
+    }
+
+    #[test]
+    fn delete_habit_unknown_id_returns_error() {
+        let conn = setup_db();
+        assert!(delete_habit(&conn, "does-not-exist").is_err());
+    }
+
+    // toggle_habit_completion
+    #[test]
+    fn toggle_habit_completion_marks_done_then_undone() {
+        let conn = setup_db();
+        let habit = create_habit(&conn, "Meditate", "#abcdef").unwrap();
+
+        let done = toggle_habit_completion(&conn, &habit.id, "2026-07-08").unwrap();
+        assert!(done.completed);
+        assert_eq!(
+            get_completions(&conn, "2026-07-08", "2026-07-08").unwrap().len(),
+            1
+        );
+
+        let undone = toggle_habit_completion(&conn, &habit.id, "2026-07-08").unwrap();
+        assert!(!undone.completed);
+        assert_eq!(
+            get_completions(&conn, "2026-07-08", "2026-07-08").unwrap().len(),
+            0
+        );
+    }
+
+    // get_completions
+    #[test]
+    fn get_completions_filters_by_inclusive_range() {
+        let conn = setup_db();
+        let habit = create_habit(&conn, "Stretch", "#123123").unwrap();
+        toggle_habit_completion(&conn, &habit.id, "2026-07-01").unwrap();
+        toggle_habit_completion(&conn, &habit.id, "2026-07-05").unwrap();
+        toggle_habit_completion(&conn, &habit.id, "2026-07-10").unwrap();
+
+        let in_range = get_completions(&conn, "2026-07-01", "2026-07-05").unwrap();
+        assert_eq!(in_range.len(), 2);
+    }
+
+    #[test]
+    fn get_completions_returns_empty_outside_range() {
+        let conn = setup_db();
+        let habit = create_habit(&conn, "Stretch", "#123123").unwrap();
+        toggle_habit_completion(&conn, &habit.id, "2026-07-01").unwrap();
+
+        let out_of_range = get_completions(&conn, "2026-08-01", "2026-08-31").unwrap();
+        assert!(out_of_range.is_empty());
     }
 }

@@ -5,16 +5,16 @@
 
 ## 2. Rust: habit + completion commands
 
-- [ ] 2.1 Implement `create_habit(name, color)` returning the created habit
-- [ ] 2.2 Implement `get_habits()` returning active (non-deleted) habits ordered by `sort_order`
-- [ ] 2.3 Implement `update_habit(id, name?, color?)` returning the updated habit, erroring on unknown id
-- [ ] 2.4 Implement `delete_habit(id)` as a soft delete (sets `deleted_at`)
-- [ ] 2.5 Implement `toggle_habit_completion(habit_id, date)` inserting/deleting the completion row and returning `{ completed }`
-- [ ] 2.6 Implement `get_completions(from, to)` returning completion rows in the inclusive date range
-- [ ] 2.7 Emit a `habits:changed` event after every mutating command (create/update/delete habit, toggle completion)
-- [ ] 2.8 Register all six commands in `lib.rs`'s `generate_handler!`; remove the old goal handlers
-- [ ] 2.9 Update `capabilities/default.json` if new permissions are needed
-- [ ] 2.10 Write Rust integration tests for all six commands (success + documented failure paths)
+- [x] 2.1 Implement `create_habit(name, color)` returning the created habit
+- [x] 2.2 Implement `get_habits()` returning active (non-deleted) habits ordered by `sort_order`
+- [x] 2.3 Implement `update_habit(id, name?, color?)` returning the updated habit, erroring on unknown id
+- [x] 2.4 Implement `delete_habit(id)` as a soft delete (sets `deleted_at`)
+- [x] 2.5 Implement `toggle_habit_completion(habit_id, date)` inserting/deleting the completion row and returning `{ completed }`
+- [x] 2.6 Implement `get_completions(from, to)` returning completion rows in the inclusive date range
+- [x] 2.7 Emit a `habits:changed` event after every mutating command (create/update/delete habit, toggle completion)
+- [x] 2.8 Register all six commands in `lib.rs`'s `generate_handler!`; remove the old goal handlers
+- [x] 2.9 Update `capabilities/default.json` if new permissions are needed
+- [x] 2.10 Write Rust integration tests for all six commands (success + documented failure paths)
 
 ## 3. Frontend: habit domain layer
 

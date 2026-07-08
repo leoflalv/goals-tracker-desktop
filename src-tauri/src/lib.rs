@@ -27,10 +27,12 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            handlers::create_goal,
-            handlers::get_goals,
-            handlers::update_goal,
-            handlers::delete_goal,
+            handlers::create_habit,
+            handlers::get_habits,
+            handlers::update_habit,
+            handlers::delete_habit,
+            handlers::toggle_habit_completion,
+            handlers::get_completions,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
