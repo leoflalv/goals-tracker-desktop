@@ -32,10 +32,10 @@
 
 ## 5. Frontend: habit actions (hooks)
 
-- [ ] 5.1 Add `useGetHabits` and `useGetCompletions(from, to)` query hooks
-- [ ] 5.2 Add `useCreateHabit`, `useUpdateHabit`, `useDeleteHabit`, `useToggleHabitCompletion` mutation hooks with query invalidation
-- [ ] 5.3 Add a `habits:changed` event listener hook that invalidates habit/completion queries, used by both windows
-- [ ] 5.4 Write `*.test.ts` unit tests for each hook: successful fetch/mutation state, error state, and that mutations invalidate the expected query keys
+- [x] 5.1 Add `useGetHabits` and `useGetCompletions(from, to)` query hooks
+- [x] 5.2 Add `useCreateHabit`, `useUpdateHabit`, `useDeleteHabit`, `useToggleHabitCompletion` mutation hooks with query invalidation
+- [x] 5.3 Add a `habits:changed` event listener hook that invalidates habit/completion queries, used by both windows
+- [x] 5.4 Write `*.test.ts` unit tests for each hook: successful fetch/mutation state, error state, and that mutations invalidate the expected query keys
 
 ## 6. Main widget rework
 
