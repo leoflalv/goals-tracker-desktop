@@ -18,10 +18,10 @@
 
 ## 3. Frontend: habit domain layer
 
-- [ ] 3.1 Delete `src/features/goals/` (domain/services/actions/components)
-- [ ] 3.2 Add `src/features/habits/domain/Habit.ts` and `HabitCompletion.ts` domain types
-- [ ] 3.3 Add pure derivation functions in `src/features/habits/domain/`: streak calculation, last-7-days week-dot mapping, daily progress fraction
-- [ ] 3.4 Write `*.test.ts` unit tests for the derivation functions covering every `habit-actions` spec scenario: streak counts consecutive days ending today, week dots reflect the last 7 days, daily progress reflects today's completions
+- [x] 3.1 Delete `src/features/goals/` (domain/services/actions/components)
+- [x] 3.2 Add `src/features/habits/domain/Habit.ts` and `HabitCompletion.ts` domain types
+- [x] 3.3 Add pure derivation functions in `src/features/habits/domain/`: streak calculation, last-7-days week-dot mapping, daily progress fraction
+- [x] 3.4 Write `*.test.ts` unit tests for the derivation functions covering every `habit-actions` spec scenario: streak counts consecutive days ending today, week dots reflect the last 7 days, daily progress reflects today's completions
 
 ## 4. Frontend: habit service layer
 
