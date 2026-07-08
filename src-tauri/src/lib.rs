@@ -14,13 +14,13 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(
             SqlBuilder::default()
-                .add_migrations("sqlite:goals.db", migrations::all())
+                .add_migrations("sqlite:habits.db", migrations::all())
                 .build(),
         )
         .setup(|app| {
             let app_data_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_data_dir)?;
-            let db_path = app_data_dir.join("goals.db");
+            let db_path = app_data_dir.join("habits.db");
             let conn = Connection::open(&db_path)?;
             conn.execute_batch(migrations::migration_sql())?;
             app.manage(Mutex::new(conn));
