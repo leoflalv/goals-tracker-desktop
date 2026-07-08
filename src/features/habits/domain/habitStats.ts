@@ -1,18 +1,7 @@
+import { addDays, formatDateKey, parseDateKey } from "@/shared/utils/date";
+
 import type { Habit } from "./Habit";
 import type { HabitCompletion } from "./HabitCompletion";
-
-function parseDateKey(key: string): Date {
-  const [year, month, day] = key.split("-").map(Number);
-  return new Date(Date.UTC(year, month - 1, day));
-}
-
-function formatDateKey(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
-
-function addDays(date: Date, amount: number): Date {
-  return new Date(date.getTime() + amount * 24 * 60 * 60 * 1000);
-}
 
 /** Consecutive completed days ending on `today`; 0 if `today` itself isn't completed. */
 export function getStreak(

@@ -39,14 +39,14 @@
 
 ## 6. Main widget rework
 
-- [ ] 6.1 Rebuild the habit row component: color checkbox, name, week dots, flame + streak count
-- [ ] 6.2 Rebuild the list component using `useGetHabits` + `useGetCompletions`: loading spinner, empty state, dynamic height capped at 10 rows with scroll beyond that
-- [ ] 6.3 Add the daily progress bar (completed/total for today)
-- [ ] 6.4 Rework the header: drag handle, current date, gear icon
-- [ ] 6.5 Wire the gear icon to open (or focus) the Manage Window
-- [ ] 6.6 Wire toggle-completion errors to the toast system
-- [ ] 6.7 Update `App.tsx` to mount the reworked widget
-- [ ] 6.8 Write `*.test.tsx` component tests covering every `main-widget-view` spec scenario: habits display with week dots/streak, loading state, empty state, mark done/undone, progress bar reflects completions, gear icon opens Manage Window, drag handle triggers `startDragging()`, dynamic height/scroll past 10 habits, toggle error surfaces via toast
+- [x] 6.1 Rebuild the habit row component: color checkbox, name, week dots, flame + streak count
+- [x] 6.2 Rebuild the list component using `useGetHabits` + `useGetCompletions`: loading spinner, empty state, dynamic height capped at 10 rows with scroll beyond that
+- [x] 6.3 Add the daily progress bar (completed/total for today)
+- [x] 6.4 Rework the header: drag handle, current date, gear icon
+- [x] 6.5 Wire the gear icon to open (or focus) the Manage Window
+- [x] 6.6 Wire toggle-completion errors to the toast system
+- [x] 6.7 Update `App.tsx` to mount the reworked widget
+- [x] 6.8 Write `*.test.tsx` component tests covering every `main-widget-view` spec scenario: habits display with week dots/streak, loading state, empty state, mark done/undone, progress bar reflects completions, gear icon opens Manage Window, drag handle triggers `startDragging()`, dynamic height/scroll past 10 habits, toggle error surfaces via toast
 
 ## 7. Manage Window shell
 
