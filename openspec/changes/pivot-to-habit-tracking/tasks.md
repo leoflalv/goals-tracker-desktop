@@ -59,11 +59,11 @@
 
 ## 8. My Habits tab
 
-- [ ] 8.1 Build the habit list (color swatch, name, edit button, delete button) with empty state
-- [ ] 8.2 Build the create/edit form (name + color picker), wired to `useCreateHabit`/`useUpdateHabit`
-- [ ] 8.3 Wire delete button to `useDeleteHabit` with a confirmation step
-- [ ] 8.4 Wire create/update/delete errors to the toast system
-- [ ] 8.5 Write `*.test.tsx` component tests covering every `my-habits-view` spec scenario: list + empty state, create (success + empty-name prevented), edit, delete (removes from list, history preserved), create/update/delete errors surface via toast
+- [x] 8.1 Build the habit list (color swatch, name, edit button, delete button) with empty state
+- [x] 8.2 Build the create/edit form (name + color picker), wired to `useCreateHabit`/`useUpdateHabit`
+- [x] 8.3 Wire delete button to `useDeleteHabit` with a confirmation step
+- [x] 8.4 Wire create/update/delete errors to the toast system
+- [x] 8.5 Write `*.test.tsx` component tests covering every `my-habits-view` spec scenario: list + empty state, create (success + empty-name prevented), edit, delete (removes from list, history preserved), create/update/delete errors surface via toast
 
 ## 9. History tab
 

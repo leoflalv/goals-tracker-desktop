@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { ColorPicker } from "./ColorPicker";
 export { Input } from "./Input";
 export { Spinner } from "./Spinner";
 export { TabButton } from "./TabButton";
