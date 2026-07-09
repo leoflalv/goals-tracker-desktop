@@ -1,22 +1,29 @@
 use tauri_plugin_sql::{Migration, MigrationKind};
 
-const GOALS_TABLE_SQL: &str = "CREATE TABLE IF NOT EXISTS goals (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    description TEXT,
-    completed INTEGER NOT NULL DEFAULT 0,
-    created_at TEXT NOT NULL
+const HABITS_SCHEMA_SQL: &str = "CREATE TABLE IF NOT EXISTS habits (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    color TEXT NOT NULL,
+    sort_order INTEGER NOT NULL,
+    created_at TEXT NOT NULL,
+    deleted_at TEXT
+);
+CREATE TABLE IF NOT EXISTS habit_completions (
+    id TEXT PRIMARY KEY,
+    habit_id TEXT NOT NULL REFERENCES habits(id),
+    completed_on TEXT NOT NULL,
+    UNIQUE(habit_id, completed_on)
 );";
 
 pub fn all() -> Vec<Migration> {
     vec![Migration {
         version: 1,
-        description: "create_goals_table",
-        sql: GOALS_TABLE_SQL,
+        description: "create_habits_tables",
+        sql: HABITS_SCHEMA_SQL,
         kind: MigrationKind::Up,
     }]
 }
 
 pub fn migration_sql() -> &'static str {
-    GOALS_TABLE_SQL
+    HABITS_SCHEMA_SQL
 }

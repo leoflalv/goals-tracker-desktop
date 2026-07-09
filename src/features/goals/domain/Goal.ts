@@ -1,7 +1,0 @@
-export type Goal = {
-  id: number;
-  title: string;
-  description: string | null;
-  completed: boolean;
-  createdAt: string;
-};

@@ -4,7 +4,7 @@ import reactHooksPlugin from "eslint-plugin-react-hooks";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default tseslint.config(
-  { ignores: ["dist", "src-tauri"] },
+  { ignores: ["dist", "coverage", "src-tauri"] },
 
   {
     files: ["**/*.{ts,tsx}"],
