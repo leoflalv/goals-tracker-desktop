@@ -37,6 +37,8 @@ The app currently implements a single-window todo-list widget backed by a `goals
 
 **`get_all_habits` command added in group 9 for History.** `get_habits` (used by the main widget and My Habits) filters to `deleted_at IS NULL` by design — but History's filter chips and month view must still show soft-deleted habits that have prior completions (per the `history-view` spec's "Deleted habits remain visible in history" requirement), and `HabitCompletion` carries no name/color of its own. This wasn't anticipated in the original command list from group 2, so a new read-only `get_all_habits` command (no `deleted_at` filter) was added specifically for History's needs, backed by its own frontend query key (`allHabitsQueryKey`) so it doesn't collide with the active-only `habitsQueryKey` cache.
 
+**Completion checkbox is custom-drawn, not a native checkbox styled with `accent-color`.** Found post-implementation: WebKit (Tauri's macOS webview) repaints native checkboxes/radios in a flat "inactive" style whenever their window isn't key, ignoring `accent-color` — and since the main widget is desktop-level and essentially never focused, the habit-row checkbox was always showing the wrong (white/black) appearance in practice. Fixed by adding `ColorCheckbox` to the shared design system: `appearance-none` plus a manually drawn background/border/checkmark, so the color is correct regardless of window focus. See `CLAUDE.md`.
+
 ## Risks / Trade-offs
 
 - [Existing local `goals.db` data is discarded] → Acceptable since the product is pre-release and PRODUCT.md's `README.md` "Features" list already advertises the habit-tracking behavior as current, implying no real user data exists yet to preserve. Confirm with user before implementation if this assumption is wrong.

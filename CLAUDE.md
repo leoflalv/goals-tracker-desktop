@@ -26,9 +26,11 @@ Two-layer app: a React frontend (`src/`) rendered inside a Tauri 2 native shell 
 
 **Window characteristics** — transparent, no decorations, positioned top-left. Window dimensions are flexible and will be adjusted as the UI is built. This is a widget-style always-visible overlay; the UI must draw its own drag handle and visual chrome since the OS titlebar is disabled.
 
+**Native form controls repaint when the window isn't focused** — this app's main window is desktop-level and rarely (if ever) key/focused. WebKit (Tauri's webview on macOS) renders native checkboxes/radios in a flat inactive style (white background, black check) whenever their window isn't key, ignoring `accent-color`. Don't style checkboxes/radios with `accent-color` alone — use `appearance-none` and draw the checked/unchecked state yourself (see `src/shared/components/ColorCheckbox.tsx`) so the appearance stays correct regardless of focus.
+
 **Platform support** — the app targets macOS and Windows. Desktop-level window positioning is platform-specific Rust code in `lib.rs`: macOS uses `NSWindowLevel` via the `cocoa` crate; Windows uses `SetWindowPos` with `HWND_BOTTOM` via `windows-rs`. Use `#[cfg(target_os = "macos")]` / `#[cfg(target_os = "windows")]` for any platform-specific branches.
 
-**Capabilities** — `src-tauri/capabilities/default.json` controls what the frontend window is allowed to do (currently `core:default` + `opener:default`). Add new Tauri plugin permissions here.
+**Capabilities** — `src-tauri/capabilities/default.json` controls what each window is allowed to do (currently `core:default` + `opener:default` + `sql:default`, granted to both the `main` and `manage` windows). Add new Tauri plugin permissions here.
 
 **Vite dev port is fixed at 1420** — Tauri's dev config hardcodes `devUrl: http://localhost:1420`. Do not change the port.
 
@@ -37,16 +39,16 @@ Two-layer app: a React frontend (`src/`) rendered inside a Tauri 2 native shell 
 Each feature lives in `src/features/<feature-name>/` with four layers:
 
 ```
-src/features/goals/
+src/features/habits/
   domain/        # TypeScript interfaces/types and pure domain logic (no framework deps)
   services/      # Tauri invoke() wrappers and external data access
-  actions/       # React hooks that orchestrate logic (e.g. useGetGoals, useCreateGoal)
+  actions/       # React hooks that orchestrate logic (e.g. useGetHabits, useCreateHabit)
   components/    # Visual React components for this feature
 ```
 
 `src/shared/` holds cross-feature utilities, shared components, and types.
 
-**Always use the shared component design system** (`src/shared/components/`: `Button`, `Input`, `Spinner`, `TabButton`, etc.) instead of raw HTML elements (`<button>`, `<input>`, ...) in feature components. If a needed UI pattern doesn't exist yet, add it to `src/shared/components/` (extend the design system) rather than writing one-off markup in a feature.
+**Always use the shared component design system** (`src/shared/components/`: `Button`, `Input`, `ColorCheckbox`, `ColorPicker`, `Chip`, `TabButton`, `Spinner`, etc.) instead of raw HTML elements (`<button>`, `<input>`, ...) in feature components. If a needed UI pattern doesn't exist yet, add it to `src/shared/components/` (extend the design system) rather than writing one-off markup in a feature.
 
 ## Import order (enforced by ESLint)
 
@@ -58,10 +60,10 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 
 // 2. Global imports via @ alias
-import { Goal } from "@/features/goals/domain/Goal";
+import { Habit } from "@/features/habits/domain/Habit";
 
 // 3. Relative imports
-import { GoalCard } from "./GoalCard";
+import { HabitRow } from "./HabitRow";
 
 // 4. CSS / assets
 import "./styles.css";

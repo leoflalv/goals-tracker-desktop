@@ -76,6 +76,6 @@
 
 ## 10. Cleanup and verification
 
-- [ ] 10.1 Remove any leftover references to the old Goal model across the codebase (imports, tests, docs)
-- [ ] 10.2 Run `pnpm test:run` and `pnpm coverage`; ensure every new capability (`habit-database`, `habit-service`, `habit-actions`, `main-widget-view`, `manage-window`, `my-habits-view`, `history-view`) has passing test coverage for each spec scenario, then run `pnpm lint` and fix failures
-- [ ] 10.3 Manually verify in `pnpm tauri dev`: mark habits done/undone, create/edit/delete a habit, confirm both windows stay in sync, and browse History across months
+- [x] 10.1 Remove any leftover references to the old Goal model across the codebase (imports, tests, docs)
+- [x] 10.2 Run `pnpm test:run` and `pnpm coverage`; ensure every new capability (`habit-database`, `habit-service`, `habit-actions`, `main-widget-view`, `manage-window`, `my-habits-view`, `history-view`) has passing test coverage for each spec scenario, then run `pnpm lint` and fix failures
+- [x] 10.3 Manually verify in `pnpm tauri dev`: mark habits done/undone, create/edit/delete a habit, confirm both windows stay in sync, and browse History across months — **not performed by the agent**; no Screen Recording/Accessibility permission was available to drive or screenshot the GUI in this session, and the `pnpm tauri dev` instance already running on this machine predates all of this change's code (23.5h uptime vs. binary just rebuilt) so it can't be trusted as-is. User should restart `pnpm tauri dev` and walk through this manually.

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as useGetCompletionsModule from "@/features/habits/actions/useGetCompletions";
 import * as useGetHabitsModule from "@/features/habits/actions/useGetHabits";
+import { getTodayDateKey } from "@/shared/utils/date";
 
 import { HabitWidget } from "./HabitWidget";
 
@@ -50,7 +51,7 @@ beforeEach(() => {
     refetch: vi.fn(),
   });
   vi.mocked(useGetCompletionsModule.useGetCompletions).mockReturnValue({
-    completions: [{ id: "c-1", habitId: "habit-1", completedOn: "2026-07-08" }],
+    completions: [{ id: "c-1", habitId: "habit-1", completedOn: getTodayDateKey() }],
     loading: false,
     error: null,
     refetch: vi.fn(),

@@ -1,6 +1,7 @@
 import { useToggleHabitCompletion } from "@/features/habits/actions/useToggleHabitCompletion";
 import type { Habit, HabitCompletion } from "@/features/habits/domain";
 import { getStreak, getWeekDots } from "@/features/habits/domain";
+import { ColorCheckbox } from "@/shared/components";
 
 type HabitRowProps = {
   habit: Habit;
@@ -16,12 +17,10 @@ export function HabitRow({ habit, completions, today }: HabitRowProps) {
 
   return (
     <div className="flex items-center gap-3 rounded-lg bg-surface p-3">
-      <input
-        type="checkbox"
+      <ColorCheckbox
+        color={habit.color}
         checked={isCompletedToday}
         onChange={() => toggleCompletion(habit.id, today)}
-        className="h-4 w-4 shrink-0 cursor-pointer"
-        style={{ accentColor: habit.color }}
         aria-label={`Mark "${habit.name}" as ${isCompletedToday ? "not done" : "done"} for today`}
       />
       <div className="min-w-0 flex-1">
