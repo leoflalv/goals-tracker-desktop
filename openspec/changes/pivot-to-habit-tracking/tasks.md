@@ -67,11 +67,12 @@
 
 ## 9. History tab
 
-- [ ] 9.1 Build the month-grid component driven by `useGetCompletions` for the visible month's range
-- [ ] 9.2 Add previous/next month navigation, disabling "next" at the current month
-- [ ] 9.3 Add per-habit filter chips (including habits with `deleted_at` set but existing completions)
-- [ ] 9.4 Add loading state for the month grid while completions are being fetched
-- [ ] 9.5 Write `*.test.tsx` component tests covering every `history-view` spec scenario: month renders completions, loading state, prev/next month navigation and "next" disabled at current month, filter by habit and clearing filters, deleted habits still shown with their history
+- [x] 9.0 Add `get_all_habits` Rust command + `getAllHabits`/`useGetAllHabits` frontend wrappers (not in the original plan — discovered during this group that `get_habits` excludes soft-deleted habits, but History needs their name/color for filter chips and the month view; see `design.md`)
+- [x] 9.1 Build the month-grid component driven by `useGetCompletions` for the visible month's range
+- [x] 9.2 Add previous/next month navigation, disabling "next" at the current month
+- [x] 9.3 Add per-habit filter chips (including habits with `deleted_at` set but existing completions)
+- [x] 9.4 Add loading state for the month grid while completions are being fetched
+- [x] 9.5 Write `*.test.tsx` component tests covering every `history-view` spec scenario: month renders completions, loading state, prev/next month navigation and "next" disabled at current month, filter by habit and clearing filters, deleted habits still shown with their history
 
 ## 10. Cleanup and verification
 

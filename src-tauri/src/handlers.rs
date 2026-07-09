@@ -31,6 +31,14 @@ pub fn get_habits(
 }
 
 #[tauri::command]
+pub fn get_all_habits(
+    state: tauri::State<'_, Mutex<Connection>>,
+) -> Result<Vec<commands::Habit>, String> {
+    let conn = state.lock().map_err(|e| e.to_string())?;
+    commands::get_all_habits(&conn)
+}
+
+#[tauri::command]
 pub fn update_habit(
     state: tauri::State<'_, Mutex<Connection>>,
     app: AppHandle,

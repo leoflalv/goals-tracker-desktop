@@ -35,6 +35,8 @@ The app currently implements a single-window todo-list widget backed by a `goals
 
 **Frontend always composes from `src/shared/components/`, never raw HTML elements.** `Button`, `Input`, `Spinner`, `TabButton`, etc. — if a needed UI pattern is missing (as `TabButton` was for the Manage Window's tabs), add it to the shared design system rather than writing one-off markup in a feature component. Applies to the remaining My Habits (group 8) and History (group 9) work in this change. See `CLAUDE.md`.
 
+**`get_all_habits` command added in group 9 for History.** `get_habits` (used by the main widget and My Habits) filters to `deleted_at IS NULL` by design — but History's filter chips and month view must still show soft-deleted habits that have prior completions (per the `history-view` spec's "Deleted habits remain visible in history" requirement), and `HabitCompletion` carries no name/color of its own. This wasn't anticipated in the original command list from group 2, so a new read-only `get_all_habits` command (no `deleted_at` filter) was added specifically for History's needs, backed by its own frontend query key (`allHabitsQueryKey`) so it doesn't collide with the active-only `habitsQueryKey` cache.
+
 ## Risks / Trade-offs
 
 - [Existing local `goals.db` data is discarded] → Acceptable since the product is pre-release and PRODUCT.md's `README.md` "Features" list already advertises the habit-tracking behavior as current, implying no real user data exists yet to preserve. Confirm with user before implementation if this assumption is wrong.

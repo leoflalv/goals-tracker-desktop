@@ -80,6 +80,30 @@ pub fn get_habits(conn: &Connection) -> Result<Vec<Habit>, String> {
     habits.map_err(|e| e.to_string())
 }
 
+/// Includes soft-deleted habits, so History can still label/color their past completions.
+pub fn get_all_habits(conn: &Connection) -> Result<Vec<Habit>, String> {
+    let mut stmt = conn
+        .prepare(
+            "SELECT id, name, color, sort_order, created_at, deleted_at \
+             FROM habits ORDER BY sort_order",
+        )
+        .map_err(|e| e.to_string())?;
+    let habits: Result<Vec<Habit>, rusqlite::Error> = stmt
+        .query_map([], |row| {
+            Ok(Habit {
+                id: row.get(0)?,
+                name: row.get(1)?,
+                color: row.get(2)?,
+                sort_order: row.get(3)?,
+                created_at: row.get(4)?,
+                deleted_at: row.get(5)?,
+            })
+        })
+        .map_err(|e| e.to_string())?
+        .collect();
+    habits.map_err(|e| e.to_string())
+}
+
 fn get_habit(conn: &Connection, id: &str) -> Result<Habit, String> {
     conn.query_row(
         "SELECT id, name, color, sort_order, created_at, deleted_at FROM habits WHERE id = ?1",
@@ -250,6 +274,18 @@ mod tests {
         let habit = create_habit(&conn, "Read", "#00ff00").unwrap();
         delete_habit(&conn, &habit.id).unwrap();
         assert!(get_habits(&conn).unwrap().is_empty());
+    }
+
+    // get_all_habits
+    #[test]
+    fn get_all_habits_includes_soft_deleted() {
+        let conn = setup_db();
+        let habit = create_habit(&conn, "Read", "#00ff00").unwrap();
+        delete_habit(&conn, &habit.id).unwrap();
+
+        let all = get_all_habits(&conn).unwrap();
+        assert_eq!(all.len(), 1);
+        assert!(all[0].deleted_at.is_some());
     }
 
     // update_habit

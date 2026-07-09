@@ -14,6 +14,13 @@ The actions layer SHALL expose a `useGetHabits` hook that fetches active habits 
 - **WHEN** `useGetHabits` mounts and the query resolves
 - **THEN** `data` contains the `Habit[]` and `isLoading` becomes `false`
 
+### Requirement: useGetAllHabits hook
+The actions layer SHALL expose a `useGetAllHabits` hook that fetches all habits, including soft-deleted ones, via `getAllHabits()` and exposes `data`, `isLoading`, and `error`, under a query key distinct from `useGetHabits` so the active-only and all-habits caches don't collide.
+
+#### Scenario: Successful fetch including deleted habits
+- **WHEN** `useGetAllHabits` mounts and the query resolves
+- **THEN** `data` contains the full `Habit[]`, including any with `deletedAt` set
+
 ### Requirement: useGetCompletions hook
 The actions layer SHALL expose a `useGetCompletions(from, to)` hook that fetches completions for a date range via `getCompletions()` and exposes `data`, `isLoading`, and `error`.
 

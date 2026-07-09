@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createHabit,
   deleteHabit,
+  getAllHabits,
   getCompletions,
   getHabits,
   toggleHabitCompletion,
@@ -48,6 +49,22 @@ describe("getHabits", () => {
   it("throws when the backend returns an invalid shape", async () => {
     mockInvoke.mockResolvedValueOnce([{ ...rawHabit, sort_order: "not-a-number" }]);
     await expect(getHabits()).rejects.toThrow();
+  });
+});
+
+describe("getAllHabits", () => {
+  it("invokes get_all_habits and returns camelCase-mapped habits, including deleted ones", async () => {
+    const deletedHabit = { ...rawHabit, id: "habit-2", deleted_at: "2024-02-01T00:00:00Z" };
+    mockInvoke.mockResolvedValueOnce([rawHabit, deletedHabit]);
+    const habits = await getAllHabits();
+    expect(mockInvoke).toHaveBeenCalledWith("get_all_habits");
+    expect(habits).toHaveLength(2);
+    expect(habits[1].deletedAt).toBe("2024-02-01T00:00:00Z");
+  });
+
+  it("throws when the backend rejects", async () => {
+    mockInvoke.mockRejectedValueOnce("db error");
+    await expect(getAllHabits()).rejects.toThrow("db error");
   });
 });
 

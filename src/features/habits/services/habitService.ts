@@ -12,10 +12,22 @@ import {
 import { HabitSchema, toHabit } from "./habitDto";
 
 export const habitsQueryKey = ["habits"] as const;
+export const allHabitsQueryKey = ["habits", "all"] as const;
 export const completionsQueryKey = ["completions"] as const;
 
 export async function getHabits(): Promise<Habit[]> {
   const [raw, err] = await tryCatch(invoke<unknown>("get_habits"));
+  if (err) throw err;
+
+  const parsed = z.array(HabitSchema).safeParse(raw);
+  if (!parsed.success) throw parsed.error;
+
+  return parsed.data.map(toHabit);
+}
+
+/** Includes soft-deleted habits, so History can label/color their past completions. */
+export async function getAllHabits(): Promise<Habit[]> {
+  const [raw, err] = await tryCatch(invoke<unknown>("get_all_habits"));
   if (err) throw err;
 
   const parsed = z.array(HabitSchema).safeParse(raw);

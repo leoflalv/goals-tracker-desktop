@@ -43,6 +43,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             handlers::create_habit,
             handlers::get_habits,
+            handlers::get_all_habits,
             handlers::update_habit,
             handlers::delete_habit,
             handlers::toggle_habit_completion,

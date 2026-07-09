@@ -36,6 +36,13 @@ The service layer SHALL expose a `getHabits()` function that invokes the `get_ha
 - **WHEN** `getHabits()` is called
 - **THEN** `invoke("get_habits")` is called and the validated, mapped `Habit[]` is returned
 
+### Requirement: getAllHabits service function
+The service layer SHALL expose a `getAllHabits()` function that invokes the `get_all_habits` Tauri command, validates the response array through `HabitDto`, and returns `Habit[]` including soft-deleted habits.
+
+#### Scenario: Fetch all habits including deleted
+- **WHEN** `getAllHabits()` is called
+- **THEN** `invoke("get_all_habits")` is called and the validated, mapped `Habit[]` (including any with `deletedAt` set) is returned
+
 ### Requirement: createHabit service function
 The service layer SHALL expose a `createHabit(name, color)` function that invokes the `create_habit` Tauri command and returns the created `Habit`.
 

@@ -43,6 +43,13 @@ The backend SHALL expose a `get_habits` command that returns all habits where `d
 - **WHEN** `get_habits` is called and a habit has a non-null `deleted_at`
 - **THEN** that habit is not included in the returned list
 
+### Requirement: List all habits command including soft-deleted
+The backend SHALL expose a `get_all_habits` command that returns every habit regardless of `deleted_at`, ordered by `sort_order`, so callers needing historical habit metadata (name, color) — such as the History view — can resolve soft-deleted habits.
+
+#### Scenario: Listing includes soft-deleted habits
+- **WHEN** `get_all_habits` is called and a habit has a non-null `deleted_at`
+- **THEN** that habit is included in the returned list
+
 ### Requirement: Update habit command
 The backend SHALL expose an `update_habit` command accepting `id` and optional `name`/`color`, updating only the provided fields and returning the updated habit.
 
@@ -91,4 +98,4 @@ Every habit and completion command SHALL have Rust integration test coverage for
 
 #### Scenario: Test suite covers all commands
 - **WHEN** the Rust test suite runs
-- **THEN** `create_habit`, `get_habits`, `update_habit`, `delete_habit`, `toggle_habit_completion`, and `get_completions` each have at least one passing integration test
+- **THEN** `create_habit`, `get_habits`, `get_all_habits`, `update_habit`, `delete_habit`, `toggle_habit_completion`, and `get_completions` each have at least one passing integration test
